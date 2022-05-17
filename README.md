@@ -1,2 +1,3 @@
 # csk_knockdown_tool
-Created with CodeSandbox
+(in work)
+Tool to assist calculation of bolted joint countersink strength knockdown based on data from MIL-HDBK-5J / MMPDS-01
