@@ -14,6 +14,10 @@ let darkTheme = dark
 // uncomment next line to define additional customizations
 // theme = createTheme(theme, {**});
 
+const summary = "This tool calculates strength knockdown factors for " +
+                "single-shear joints based on fastener type, fastener head style, " +
+                "and parent material properties.\nAll strength data comes from from MIL-HDBK-5J / MMPDS-01"
+
 // DEBUG ONLY
 // define junk data
 const fsuSelect = ["50 ksi (345 MPa)", "95 ksi (655 MPa)", "108 ksi (745 MPa)"]
@@ -27,12 +31,13 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box className="App" sx={{ textAlign: "center" }}>
-        <Paper elevation={3} sx={{ marginTop: "50px" }}>
+      <Box className="App" sx={{ textAlign: "center", width: "75%", marginLeft:"12.5%", marginRight:"12.5%" }}>
+        <Paper elevation={3} sx={{ marginTop: "50px", padding:"10px" }}>
           <Typography variant="h3">Countersunk Joint Knockdown Calculator</Typography>
           <br />
           <Typography variant="p">
-            (in work)
+            (in work)<br />
+            {summary}
           </Typography>
           <br />
           <br />
@@ -44,7 +49,7 @@ export default function App() {
             Toggle theme
           </Button>
         </Paper>
-        <InputsCard  ref_fbru={ref_fbru} ref_unit={ref_unit} ref_fast={ref_fast} fastSelect={fsuSelect} />
+        <InputsCard ref_fbru={ref_fbru} ref_unit={ref_unit} ref_fast={ref_fast} fastSelect={fsuSelect} />
       </Box>
     </ThemeProvider>
   );

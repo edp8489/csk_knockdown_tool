@@ -22,14 +22,11 @@ export default function InputsCard(props){
   const fastSelEntries = props.fastSelect.map((val, ind)=>(<MenuItem key={ind} value={val}>{val}</MenuItem>));
   
   return(
-    <Paper elevation={3} sx={{ marginTop: "10px", marginBottom: "10px" }}>
+    <Paper elevation={3} sx={{ marginTop: "10px", marginBottom: "10px", padding:"10px" }}>
       <Typography variant="overline" >Inputs</Typography>
       <br />
       <Box
       component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
-      }}
       noValidate
       autoComplete="off"
     >
