@@ -14,20 +14,56 @@ let darkTheme = dark
 // uncomment next line to define additional customizations
 // theme = createTheme(theme, {**});
 
-const summary = "This tool calculates strength knockdown factors for " +
-                "single-shear joints based on fastener type, fastener head style, " +
-                "and parent material properties.\nAll strength data comes from from MIL-HDBK-5J / MMPDS-01"
-
 // DEBUG ONLY
 // define junk data
 const fsuSelect = ["50 ksi (345 MPa)", "95 ksi (655 MPa)", "108 ksi (745 MPa)"]
 
+const summary = "This tool calculates strength knockdown factors for " +
+                "single-shear joints based on fastener type, fastener head style, " +
+                "and parent material properties.\nAll strength data comes from from MIL-HDBK-5J / MMPDS-01"
+
+const MPA_TO_PSI = 145 // 1 MPa = 145 psi
+const LBF_TO_NEWTON = 1.448 // 1 lbf = 4.448 N
+
+function mpa2psi(mpa_val){
+  return mpa_val*MPA_TO_PSI
+}
+
+function lbf2newton(lbf_val){
+  return lbf_val*LBF_TO_NEWTON
+}
+
+
 export default function App() {
-  const [state, setState] = React.useState({ dark: false });
-  const ref_fbru = React.useRef(null);
-  const ref_unit = React.useRef('psi');
-  const ref_fast = React.useRef("");
-  let theme = state.dark ? darkTheme : lightTheme;
+  const [darkMode, toggleDark] = React.useState(false);
+  const [readyToCalc, setReady] = React.useState(false)
+  const [userInputs, setInputs] = React.useState({
+    fbru:"",
+    unit: "psi",
+    fast_sel: ""
+  });
+  
+  let theme = darkMode ? darkTheme : lightTheme;
+
+  const handleChange = function(e) {
+    setInputs(prevState => {
+      return{...prevState, ...{[e.target.name]:e.target.value}}
+    })
+    setReady(false)
+    e.preventDefault()
+  }
+
+  const calculate = function(e){
+    // only perform if all inputs are present
+    if (userInputs.fbru ==="" || userInputs.fast_sel ===""){
+      alert("Please define all inputs first!")
+    }
+    else {
+      setReady(true)
+    }
+    e.preventDefault()
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -43,13 +79,27 @@ export default function App() {
           <br />
           <Button
             variant="contained"
-            color={state.dark ? "secondary" : "primary"}
-            onClick={() => setState({ dark: !state.dark })}
+            color={darkMode ? "secondary" : "primary"}
+            onClick={() => toggleDark( !darkMode )}
           >
             Toggle theme
           </Button>
         </Paper>
-        <InputsCard ref_fbru={ref_fbru} ref_unit={ref_unit} ref_fast={ref_fast} fastSelect={fsuSelect} />
+        <InputsCard 
+          fbruVal={userInputs.fbru}
+          unitVal={userInputs.unit}
+          fastVal={userInputs.fast_sel}
+          fastSelect={fsuSelect}
+          hdlChg={handleChange}
+          hdlSub={calculate} />
+        <Paper elevation={3} sx={{padding: "10px"}}>
+          <Typography variant="subtitle1">Outputs (Debug Only)</Typography><br />
+          <span>{readyToCalc? "Calculated values":"User input required. Press 'Calculate' when ready"}</span>
+          <ul>
+            <li>Sheet Fbru input: {readyToCalc? userInputs.fbru : ""} [{readyToCalc? userInputs.unit : ""}]</li>
+            <li>Sheet Fbru (psi): {(readyToCalc && userInputs.unit==="psi")?"no conversion necessary":mpa2psi(userInputs.fbru)}</li>
+          </ul>
+        </Paper>
       </Box>
     </ThemeProvider>
   );

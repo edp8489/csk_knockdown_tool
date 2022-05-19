@@ -11,16 +11,21 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import Select from '@mui/material/Select';
+import Button from "@mui/material/Button";
+import {debounce} from "lodash";
 
 export default function InputsCard(props){
   // required props:
-  // ref for numeric input value {ref_fbru}
-  // ref for unit radio value {ref_unit}
-  // ref for fastener Fsu select value {ref_fast}
+  // state variable for numeric input value {fbruVal}
+  // state variable for unit radio value {unitVal}
+  // state variable for fastener Fsu select value {fastVal}
+  // handleChange function {hdlChg}
+  // handleSubmit function {hdlSub}
   // array of options for fastener Fsu select {fastSelect}
 
   const fastSelEntries = props.fastSelect.map((val, ind)=>(<MenuItem key={ind} value={val}>{val}</MenuItem>));
-  
+
+
   return(
     <Paper elevation={3} sx={{ marginTop: "10px", marginBottom: "10px", padding:"10px" }}>
       <Typography variant="overline" >Inputs</Typography>
@@ -29,6 +34,7 @@ export default function InputsCard(props){
       component="form"
       noValidate
       autoComplete="off"
+      onSubmit={props.hdlSub}
     >
       <div>
       <FormControl sx={{margin:"10px"}}>
@@ -37,7 +43,9 @@ export default function InputsCard(props){
           id="fbru-input"
           label="Sheet Fbru"
           type="number"
-          inputRef={props.ref_fbru}
+          name="fbru"
+          value={props.fbruVal}
+          onChange={props.hdlChg}
         />
       </FormControl>
       <FormControl sx={{margin:"10px"}}>
@@ -45,12 +53,12 @@ export default function InputsCard(props){
       <RadioGroup
         row
         aria-labelledby="units-radio-buttons-group-label"
-        name="units-radio-buttons-group"
-        defaultValue="psi"
-        ref={props.ref_unit}
+        name="unit"
+        value={props.unitVal}
+        onChange={props.hdlChg}
       >
         <FormControlLabel value="psi" control={<Radio />} label="psi" />
-        <FormControlLabel value="mpa" control={<Radio />} label="MPa" />
+        <FormControlLabel value="MPa" control={<Radio />} label="MPa" />
       </RadioGroup>
     </FormControl>
     </div>
@@ -61,8 +69,9 @@ export default function InputsCard(props){
           labelId="fastener-select-helper-label"
           id="fastener-select-helper"
           label="Fastener Fsu"
-          inputRef={props.ref_fast}
-          defaultValue=""
+          name="fast_sel"
+          value={props.fastVal}
+          onChange={props.hdlChg}
         >
           <MenuItem value="">
             <em>None</em>
@@ -72,6 +81,7 @@ export default function InputsCard(props){
         <FormHelperText>Fastener Shear Strength</FormHelperText>
       </FormControl>
     </div>
+    <Button type="submit">Calculate</Button>
     </Box>
     </Paper>
   )
