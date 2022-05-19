@@ -12,7 +12,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import Select from '@mui/material/Select';
 import Button from "@mui/material/Button";
-import {debounce} from "lodash";
 
 export default function InputsCard(props){
   // required props:
@@ -21,9 +20,9 @@ export default function InputsCard(props){
   // state variable for fastener Fsu select value {fastVal}
   // handleChange function {hdlChg}
   // handleSubmit function {hdlSub}
-  // array of options for fastener Fsu select {fastSelect}
+  // array of options for fastener Fsu select {fastList}
 
-  const fastSelEntries = props.fastSelect.map((val, ind)=>(<MenuItem key={ind} value={val}>{val}</MenuItem>));
+  const fastSelEntries = props.fastList.map((val, ind)=>(<MenuItem key={ind} value={val}>{val}</MenuItem>));
 
 
   return(
@@ -81,7 +80,7 @@ export default function InputsCard(props){
         <FormHelperText>Fastener Shear Strength</FormHelperText>
       </FormControl>
     </div>
-    <Button type="submit">Calculate</Button>
+    <Button variant="contained" type="submit">Calculate</Button>
     </Box>
     </Paper>
   )

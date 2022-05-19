@@ -4,6 +4,7 @@ import { Box, Paper, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import {light, dark} from "./styles.js";
+import NavBar from "./NavBar";
 import InputsCard from "./InputsCard";
 
 // defined using let instead of const in case you want to set
@@ -23,7 +24,7 @@ const summary = "This tool calculates strength knockdown factors for " +
                 "and parent material properties.\nAll strength data comes from from MIL-HDBK-5J / MMPDS-01"
 
 const MPA_TO_PSI = 145 // 1 MPa = 145 psi
-const LBF_TO_NEWTON = 1.448 // 1 lbf = 4.448 N
+const LBF_TO_NEWTON = 4.448 // 1 lbf = 4.448 N
 
 function mpa2psi(mpa_val){
   return mpa_val*MPA_TO_PSI
@@ -38,7 +39,7 @@ export default function App() {
   const [darkMode, toggleDark] = React.useState(false);
   const [readyToCalc, setReady] = React.useState(false)
   const [userInputs, setInputs] = React.useState({
-    fbru:"",
+    fbru: "",
     unit: "psi",
     fast_sel: ""
   });
@@ -68,7 +69,8 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box className="App" sx={{ textAlign: "center", width: "75%", marginLeft:"12.5%", marginRight:"12.5%" }}>
-        <Paper elevation={3} sx={{ marginTop: "50px", padding:"10px" }}>
+        <NavBar themeToggle={() => toggleDark( !darkMode )} />
+        <Paper elevation={3} sx={{ marginTop: "20px", padding:"10px" }}>
           <Typography variant="h3">Countersunk Joint Knockdown Calculator</Typography>
           <br />
           <Typography variant="p">
@@ -77,19 +79,12 @@ export default function App() {
           </Typography>
           <br />
           <br />
-          <Button
-            variant="contained"
-            color={darkMode ? "secondary" : "primary"}
-            onClick={() => toggleDark( !darkMode )}
-          >
-            Toggle theme
-          </Button>
         </Paper>
         <InputsCard 
           fbruVal={userInputs.fbru}
           unitVal={userInputs.unit}
           fastVal={userInputs.fast_sel}
-          fastSelect={fsuSelect}
+          fastList={fsuSelect}
           hdlChg={handleChange}
           hdlSub={calculate} />
         <Paper elevation={3} sx={{padding: "10px"}}>
@@ -97,7 +92,7 @@ export default function App() {
           <span>{readyToCalc? "Calculated values":"User input required. Press 'Calculate' when ready"}</span>
           <ul>
             <li>Sheet Fbru input: {readyToCalc? userInputs.fbru : ""} [{readyToCalc? userInputs.unit : ""}]</li>
-            <li>Sheet Fbru (psi): {(readyToCalc && userInputs.unit==="psi")?"no conversion necessary":mpa2psi(userInputs.fbru)}</li>
+            <li>Sheet Fbru (psi): {(readyToCalc && userInputs.unit!=="psi")?mpa2psi(userInputs.fbru):"no conversion necessary"}</li>
           </ul>
         </Paper>
       </Box>
