@@ -11,7 +11,7 @@ const buttonSVG = <svg viewBox="0 0 32 32" width="24" height="24" fill="currentc
                     </path>
                 </svg>
 
-export default function NavBar(props){
+export function NavBar(props){
     const {themeToggle} = props
     return(
         <React.Fragment>
@@ -29,3 +29,26 @@ export default function NavBar(props){
 }
 
 
+export function Footer(){
+  return(
+    <div className="credits" style={{
+      fontSize: '0.8em',
+      margin: '8em auto -4em auto',
+      textAlign: 'center',
+  }} >
+      ©&nbsp;2022&nbsp;Eric Peters
+      &nbsp;
+      •
+      &nbsp;
+      <a href="https://edp8489.github.io">Homepage</a>
+      &nbsp;
+      •
+      &nbsp;
+      <a href="https://www.linkedin.com/in/eric-peters-a187aa17/">Linkedin</a>
+      &nbsp;
+      •
+      &nbsp;
+      <a href="https://github.com/edp8489">github</a>
+  </div>
+  )
+}

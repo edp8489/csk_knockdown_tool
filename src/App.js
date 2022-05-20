@@ -4,7 +4,7 @@ import { Box, Paper, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import {light, dark} from "./styles.js";
-import NavBar from "./NavBar";
+import {NavBar, Footer} from "./NavBar";
 import InputsCard from "./InputsCard";
 
 // defined using let instead of const in case you want to set
@@ -95,6 +95,7 @@ export default function App() {
             <li>Sheet Fbru (psi): {(readyToCalc && userInputs.unit!=="psi")?mpa2psi(userInputs.fbru):"no conversion necessary"}</li>
           </ul>
         </Paper>
+        <Footer />
       </Box>
     </ThemeProvider>
   );
