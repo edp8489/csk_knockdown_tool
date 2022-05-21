@@ -25,8 +25,8 @@ palette: {
     main: "#d32f2f"
     },
     background: {
-    default: "rgb(0,30,60)",
-    paper: "rgb(26,33,40)"
+    default: "rgb(43, 42, 51)",
+    paper: "rgba(66, 65, 77, 1)"
     }
 }
 });
