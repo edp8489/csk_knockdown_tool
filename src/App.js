@@ -6,6 +6,7 @@ import React from "react";
 import {light, dark} from "./styles.js";
 import {NavBar, Footer} from "./NavBar";
 import InputsCard from "./InputsCard";
+import * as mathUtils from "./mathUtils"
 
 // defined using let instead of const in case you want to set
 // other elements later based on primary/secondary colors
@@ -18,22 +19,11 @@ let darkTheme = dark
 // DEBUG ONLY
 // define junk data
 const fsuSelect = ["50 ksi (345 MPa)", "95 ksi (655 MPa)", "108 ksi (745 MPa)"]
+const cskData = require("./data/csk_data.json")
 
 const summary = "This tool calculates strength knockdown factors for " +
                 "single-shear joints based on fastener type, fastener head style, " +
                 "and parent material properties.\nAll strength data comes from from MIL-HDBK-5J / MMPDS-01"
-
-const MPA_TO_PSI = 145 // 1 MPa = 145 psi
-const LBF_TO_NEWTON = 4.448 // 1 lbf = 4.448 N
-
-function mpa2psi(mpa_val){
-  return mpa_val*MPA_TO_PSI
-}
-
-function lbf2newton(lbf_val){
-  return lbf_val*LBF_TO_NEWTON
-}
-
 
 export default function App() {
   const [darkMode, toggleDark] = React.useState(false);
@@ -92,7 +82,7 @@ export default function App() {
           <span>{readyToCalc? "Calculated values":"User input required. Press 'Calculate' when ready"}</span>
           <ul>
             <li>Sheet Fbru input: {readyToCalc? userInputs.fbru : ""} [{readyToCalc? userInputs.unit : ""}]</li>
-            <li>Sheet Fbru (psi): {(readyToCalc && userInputs.unit!=="psi")?mpa2psi(userInputs.fbru):"no conversion necessary"}</li>
+            <li>Sheet Fbru (psi): {(readyToCalc && userInputs.unit!=="psi")?mathUtils.mpa2psi(userInputs.fbru):"no conversion necessary"}</li>
           </ul>
         </Paper>
         <Footer />
