@@ -44,6 +44,7 @@ export function calcKnockdown(t, P, tcsk, d, Fbru, Fsu){
  let Ptmp = P;
 
  // Loop through dataset, shorten output arrays if data point is null
+ // CAUTION: null can be at beginning OR end of array!
  console.log("Checking strength data for null values")
  for (let P_i in P) {
    if (P_i === null){
