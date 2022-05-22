@@ -65,6 +65,7 @@ export default function InputsCard(props){
     <FormControl sx={{ m: 1, minWidth: 200 }}>
         <InputLabel id="fastener-select-helper-label">Fastener Fsu</InputLabel>
         <Select
+          required
           labelId="fastener-select-helper-label"
           id="fastener-select-helper"
           label="Fastener Fsu"

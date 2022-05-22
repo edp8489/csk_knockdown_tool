@@ -18,8 +18,11 @@ let darkTheme = dark
 
 // DEBUG ONLY
 // define junk data
-const fsuSelect = ["50 ksi (345 MPa)", "95 ksi (655 MPa)", "108 ksi (745 MPa)"]
+//const fsuSelect = ["50 ksi (345 MPa)", "95 ksi (655 MPa)", "108 ksi (745 MPa)"]
 const cskData = require("./data/csk_data.json")
+console.log(Object.keys(cskData))
+console.log(cskData["fastener_data"].map(x=>x.metadata.fast_fsu))
+const fsuSelect = cskData["fastener_data"].map(x=>mathUtils.selectFormat(x.metadata.fast_fsu))
 
 const summary = "This tool calculates strength knockdown factors for " +
                 "single-shear joints based on fastener type, fastener head style, " +
@@ -83,6 +86,8 @@ export default function App() {
           <ul>
             <li>Sheet Fbru input: {readyToCalc? userInputs.fbru : ""} [{readyToCalc? userInputs.unit : ""}]</li>
             <li>Sheet Fbru (psi): {(readyToCalc && userInputs.unit!=="psi")?mathUtils.mpa2psi(userInputs.fbru):"no conversion necessary"}</li>
+            <li>tcsk/t: {[1, 2, 3]}</li>
+            <li>Kcsk: </li>
           </ul>
         </Paper>
         <Footer />
