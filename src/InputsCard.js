@@ -18,11 +18,12 @@ export default function InputsCard(props){
   // state variable for numeric input value {fbruVal}
   // state variable for unit radio value {unitVal}
   // state variable for fastener Fsu select value {fastVal}
+  // state variable for fasteler select display text {fastDisp}
   // handleChange function {hdlChg}
   // handleSubmit function {hdlSub}
   // array of options for fastener Fsu select {fastList}
 
-  const fastSelEntries = props.fastList.map((val, ind)=>(<MenuItem key={ind} value={val}>{val}</MenuItem>));
+  const fastSelEntries = props.fastList.map((val, ind)=>(<MenuItem key={ind} value={val}>{props.fastDisp[ind]}</MenuItem>));
 
 
   return(

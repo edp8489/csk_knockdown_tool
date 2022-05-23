@@ -22,7 +22,8 @@ let darkTheme = dark
 const cskData = require("./data/csk_data.json")
 //console.log(Object.keys(cskData))
 //console.log(cskData["fastener_data"].map(x=>x.metadata.fast_fsu))
-const fsuSelect = cskData["fastener_data"].map(x=>mathUtils.selectFormat(x.metadata.fast_fsu))
+const fSelDisp = cskData["fastener_data"].map(x=>mathUtils.selectFormat(x.metadata.fast_fsu))
+const fSelVal = cskData["fastener_data"].map(x=>x.metadata.id)
 
 const summary = "This tool calculates strength knockdown factors for " +
                 "single-shear joints based on fastener type, fastener head style, " +
@@ -38,10 +39,11 @@ export default function App() {
   });
   // @TODO expand state with Kcsk_user
   const outputSchema = {
+    rawData:{},
     tcsk_t:[],
     Kcsk: []
   }
-  const [Kcsk, setOutputs] = React.useState(outputSchema)
+  const [outputState, setOutputs] = React.useState(outputSchema)
   
   let theme = darkMode ? darkTheme : lightTheme;
 
@@ -61,7 +63,12 @@ export default function App() {
     }
     else {
       setReady(true)
-      //let [t_nd, K] = mathUtils.calcKnockdown()
+      const selectedData = cskData["fastener_data"].filter(x => x.metadata.id === userInputs.fast_sel)
+      setOutputs(prevState =>{
+        return{...prevState, ...{rawData:selectedData}}
+      })
+      
+      //let [t_nd, K] = mathUtils.calcUltKnockdown()
     }
     e.preventDefault()
   }
@@ -85,7 +92,8 @@ export default function App() {
           fbruVal={userInputs.fbru}
           unitVal={userInputs.unit}
           fastVal={userInputs.fast_sel}
-          fastList={fsuSelect}
+          fastList={fSelVal}
+          fastDisp={fSelDisp}
           hdlChg={handleChange}
           hdlSub={calculate} />
         <Paper elevation={3} sx={{padding: "10px"}}>

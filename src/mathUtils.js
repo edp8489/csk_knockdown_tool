@@ -22,7 +22,7 @@ export function selectFormat(Fsu_psi){
   return (Fsu_ksi + " ksi (" + Fsu_MPa +" MPa)")
 
 }
-export function calcKnockdown(t, P, tcsk, d, Fbru, Fsu){
+export function calcUltKnockdown(t, Pult, tcsk, d, Fbru, Fsu){
   /*
   Calculates nondimensional joint knockdown based on supplied data
   INPUTS
@@ -41,22 +41,9 @@ export function calcKnockdown(t, P, tcsk, d, Fbru, Fsu){
 
  // calculate csk depth ratio for all sheet thicknesses
  let tcsk_t = tcsk/t;
- let Ptmp = P;
-
- // Loop through dataset, shorten output arrays if data point is null
- // CAUTION: null can be at beginning OR end of array!
- console.log("Checking strength data for null values")
- for (let P_i in P) {
-   if (P_i === null){
-     console.log("Null value found, reducing output arrays")
-     tcsk_t.shift()
-     Ptmp.shift()
-     Penv.shift()
-   }
- }
 
  // calculate Kcsk for valid data pairs
- let Kcsk = Ptmp.map((x, ind) => mjs.evaluate("a/b",{a:x, b:Penv[ind]}))
+ let Kcsk = Pult.map((x, ind) => mjs.evaluate("a/b",{a:x, b:Penv[ind]}))
 
   return {tcsk_t, Kcsk }
 }
