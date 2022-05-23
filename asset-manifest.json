@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.js": "/csk_knockdown_tool/static/js/main.6668f3a6.chunk.js",
+    "main.js.map": "/csk_knockdown_tool/static/js/main.6668f3a6.chunk.js.map",
+    "runtime-main.js": "/csk_knockdown_tool/static/js/runtime-main.703af7af.js",
+    "runtime-main.js.map": "/csk_knockdown_tool/static/js/runtime-main.703af7af.js.map",
+    "static/js/2.f82c5cff.chunk.js": "/csk_knockdown_tool/static/js/2.f82c5cff.chunk.js",
+    "static/js/2.f82c5cff.chunk.js.map": "/csk_knockdown_tool/static/js/2.f82c5cff.chunk.js.map",
+    "index.html": "/csk_knockdown_tool/index.html",
+    "static/js/2.f82c5cff.chunk.js.LICENSE.txt": "/csk_knockdown_tool/static/js/2.f82c5cff.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.703af7af.js",
+    "static/js/2.f82c5cff.chunk.js",
+    "static/js/main.6668f3a6.chunk.js"
+  ]
+}
