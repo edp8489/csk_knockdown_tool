@@ -7,6 +7,7 @@ import {light, dark} from "./styles.js";
 import {NavBar, Footer} from "./NavBar";
 import InputsCard from "./InputsCard";
 import * as mathUtils from "./mathUtils"
+import * as plotUtils from "./plotUtils"
 
 // defined using let instead of const in case you want to set
 // other elements later based on primary/secondary colors
@@ -40,8 +41,8 @@ export default function App() {
   // @TODO expand state with Kcsk_user
   const outputSchema = {
     rawData:{},
-    tcsk_t:[],
-    Kcsk: []
+    nomKcsk:[],
+    userKcsk: []
   }
   const [outputState, setOutputs] = React.useState(outputSchema)
   
@@ -63,15 +64,45 @@ export default function App() {
     }
     else {
       setReady(true)
-      const selectedData = cskData["fastener_data"].filter(x => x.metadata.id === userInputs.fast_sel)
+      const selectedData = cskData["fastener_data"].find(x => x.metadata.id === userInputs.fast_sel)
+      console.log(selectedData)
       setOutputs(prevState =>{
         return{...prevState, ...{rawData:selectedData}}
       })
       
-      //let [t_nd, K] = mathUtils.calcUltKnockdown()
+      // mathUtils.calcUltKnockdown(t, Pult, tcsk, d, Fbru, Fsu)
+      // calculate (tcsk_t, nomKcsk) for raw data
+      // @TODO
+      
+      let nK = selectedData.dataset.map(el => mathUtils.calcUltKnockdown(
+        el.tsht,
+        el.Pult,
+        el.tcsk,
+        el.d,
+        selectedData.metadata.sht_fbru2A,
+        selectedData.metadata.fast_fsu
+      ))
+      console.log(nK)
+      setOutputs(prevState =>{
+        return{...prevState, ...{nomKcsk: nK}}
+      })
+      // calculate (tcsk_t, userKcsk) for user-supplied Fbru input
+      // @TODO
     }
     e.preventDefault()
   }
+  let scatterPlot = readyToCalc? plotUtils.genScatterPlot(
+    outputState.nomKcsk,
+     "Countersink Depth Ratio (tcsk / t) [-]",
+     "Joint Strength Knockdown (Kcsk) [-]",
+     "Joint Strength Knockdown (nominal data)"
+  ) :
+  plotUtils.genScatterPlot(
+    outputSchema.nomKcsk,
+     "Countersink Depth Ratio (tcsk / t) [-]",
+     "Joint Strength Knockdown (Kcsk) [-]",
+     "Joint Strength Knockdown (nominal data)"
+  )
 
   return (
     <ThemeProvider theme={theme}>
@@ -97,14 +128,15 @@ export default function App() {
           hdlChg={handleChange}
           hdlSub={calculate} />
         <Paper elevation={3} sx={{padding: "10px"}}>
-          <Typography variant="subtitle1">Outputs (Debug Only)</Typography><br />
-          <span>{readyToCalc? "Calculated values":"User input required. Press 'Calculate' when ready"}</span>
+          <Typography variant="subtitle1">Outputs</Typography><br />
+          <span>{readyToCalc? "Calculated values (debug use)":"User input required. Press 'Calculate' when ready"}</span>
           <ul>
-            <li>Sheet Fbru input: {readyToCalc? userInputs.fbru : ""} [{readyToCalc? userInputs.unit : ""}]</li>
-            <li>Sheet Fbru (psi): {(readyToCalc && userInputs.unit!=="psi")?mathUtils.mpa2psi(userInputs.fbru):"no conversion necessary"}</li>
-            <li>tcsk/t: {readyToCalc? "TODO": ""}</li>
-            <li>Kcsk: {readyToCalc? "TODO": ""}</li>
+            <li>Fastener dropdown id: {readyToCalc? userInputs.fast_sel: ""}</li>
+            <li>Data Source: {readyToCalc? outputState.rawData.metadata.fast_ref: ""}</li>
+            <li>User Fbru input: {readyToCalc? userInputs.fbru : ""} [{readyToCalc? userInputs.unit : ""}]</li>
+            <li>User Fbru (psi): {(readyToCalc && userInputs.unit!=="psi")?mathUtils.mpa2psi(userInputs.fbru):"no conversion necessary"}</li>
           </ul>
+          {scatterPlot}
         </Paper>
         <Footer />
       </Box>

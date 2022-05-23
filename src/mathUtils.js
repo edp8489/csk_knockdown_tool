@@ -40,12 +40,17 @@ export function calcUltKnockdown(t, Pult, tcsk, d, Fbru, Fsu){
  let Penv = jointStrengthEnvelope(t,d,Fbru,Fsu);
 
  // calculate csk depth ratio for all sheet thicknesses
- let tcsk_t = tcsk/t;
+ let tcsk_t = mjs.dotDivide(tcsk,t);
+ //console.log(tcsk_t)
 
  // calculate Kcsk for valid data pairs
  let Kcsk = Pult.map((x, ind) => mjs.evaluate("a/b",{a:x, b:Penv[ind]}))
 
-  return {tcsk_t, Kcsk }
+  return {tcsk_t, Kcsk, Penv, d }
+}
+
+export function calcUserKnockdown(userFbru, nomKcsk) {
+  // @TODO
 }
 
 export function jointStrengthEnvelope(t, d, Fbru, Fsu){
@@ -60,6 +65,6 @@ export function jointStrengthEnvelope(t, d, Fbru, Fsu){
   */
  let Pbru = mjs.evaluate("t*d*Fbru",{t:t, d:d, Fbru:Fbru});
  let Psu = mjs.evaluate("F*pi*(d^2)/4",{d:d, F:Fsu,pi:mjs.pi});
- Penv = Pbru.map((P_i)=>mjs.min(P_i,Psu));
+ let Penv = Pbru.map((P_i)=>mjs.min(P_i,Psu));
  return Penv
 }
