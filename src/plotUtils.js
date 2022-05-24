@@ -1,4 +1,4 @@
-import { Scatter } from 'react-chartjs-2';
+import { Chart, Scatter } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     LinearScale,
@@ -50,7 +50,10 @@ export const T10RGB50A = {
 
 const colorNames = Object.keys(tableau10Hex);
 
-export function genScatterPlot(rawData, xLabel, yLabel, titleText){
+// @TODO Set text color (ChartJS.defaults.color) based on darkMode
+ChartJS.defaults.font.size = 14
+
+export function genKcskPlot(rawData, xLabel, yLabel, titleText){
     // define plotting options
     const options = {
         scales: {
@@ -83,7 +86,6 @@ export function genScatterPlot(rawData, xLabel, yLabel, titleText){
             }
         }
     }
-    // @TODO Set text color (ChartJS.defaults.color) based on darkMode
 
     // prepare raw data for plotting
     /* content:
@@ -123,6 +125,7 @@ export function genScatterPlot(rawData, xLabel, yLabel, titleText){
             data: dataTuples,
             pointBorderColor: borderColor,
             pointBackgroundColor: backgroundColor,
+            pointRadius:4,
             borderColor: backgroundColor,
             backgroundColor:backgroundColor,
             showLine: true
@@ -133,5 +136,123 @@ export function genScatterPlot(rawData, xLabel, yLabel, titleText){
 
     ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Title, Legend);
     return <Scatter options={options} data={formattedData} />
-    //return {options, formattedData}
+}
+
+export function genEnvPlot(rawData, xLabel, yLabel, titleText){
+    /*
+        rawData = {
+            points: [selectedData.dataset],
+            Penv: [nomCsk.Penv]
+        }
+    */
+    // define plotting options
+    console.log(rawData)
+    const options = {
+        scales: {
+            x:{
+                type:"linear",
+                //min: 0,
+                //max: 1,
+                beginAtZero: true,
+                title: {
+                    display:true, 
+                    text:xLabel}
+            },
+            y:{
+                type:"linear",
+                //min:0.5,
+                //max:1.1,
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: yLabel}
+            }
+        },
+        plugins: {
+            legend:{
+                position: "top"
+            },
+            title:{
+                display: true,
+                text: titleText
+            }
+        }
+    }
+
+    // prepare raw data for plotting
+    /* content:
+        data = {
+            datasets: [
+                {
+                    label: "d = ## in",
+                    data: [
+                        {
+                        x: [],
+                        y: []
+                        }
+                    ],
+                    borderColor: "",
+                    backgroundColor: ""
+                }
+            ],
+        }
+    */
+    let formattedData = {}
+    let ultPts = rawData.points.map((el, ind) => {
+        //todo
+        console.log("el: ")
+        console.log(el)
+        let label = "d = " + el.d + " in"
+        let xData = el.tsht
+        let yData = el.Pult
+        let borderColor = T10RGB[colorNames[ind]]
+        //console.log(borderColor)
+        let backgroundColor = T10RGB50A[colorNames[ind]]
+        //console.log(backgroundColor)
+        let dataTuples = xData.map((x, ind) => {return {x: x, y:yData[ind]}})
+
+        // package everything
+        let dataset_i = {
+            label: label,
+            data: dataTuples,
+            pointBorderColor: borderColor,
+            pointBackgroundColor: backgroundColor,
+            borderColor: backgroundColor,
+            backgroundColor:backgroundColor,
+            showLine: true
+        }
+        return dataset_i
+    })
+    //console.log(formattedData)
+    const envPlots = rawData.nomKcsk.map((el, ind) => {
+        //todo
+        console.log("el: ")
+        console.log(el)
+        let label = "Strength Envelope"
+        let xData = rawData.points[ind].tsht
+        let yData = el.Penv
+        let borderColor = T10RGB[colorNames[ind]]
+        //console.log(borderColor)
+        let backgroundColor = T10RGB50A[colorNames[ind]]
+        //console.log(backgroundColor)
+        let dataTuples = xData.map((x, ind) => {return {x: x, y:yData[ind]}})
+
+        // package everything
+        let dataset_i = {
+            label: label,
+            data: dataTuples,
+            pointRadius: 0,
+            borderColor: borderColor,
+            backgroundColor:backgroundColor,
+            borderDash: [10, 10],
+            showLine: true
+        }
+        return dataset_i
+    })
+    //formattedData["datasets"].append(envPlots)
+    formattedData["datasets"] = ultPts.concat(envPlots)
+    console.log(formattedData)
+
+    ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Title, Legend);
+    return <Scatter options={options} data={formattedData} />
 }

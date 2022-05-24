@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { Box, Paper, Button } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import {light, dark} from "./styles.js";
@@ -8,6 +8,10 @@ import {NavBar, Footer} from "./NavBar";
 import InputsCard from "./InputsCard";
 import * as mathUtils from "./mathUtils"
 import * as plotUtils from "./plotUtils"
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // defined using let instead of const in case you want to set
 // other elements later based on primary/secondary colors
@@ -82,7 +86,7 @@ export default function App() {
         selectedData.metadata.sht_fbru2A,
         selectedData.metadata.fast_fsu
       ))
-      console.log(nK)
+      // console.log(nK)
       setOutputs(prevState =>{
         return{...prevState, ...{nomKcsk: nK}}
       })
@@ -91,18 +95,30 @@ export default function App() {
     }
     e.preventDefault()
   }
-  let scatterPlot = readyToCalc? plotUtils.genScatterPlot(
+  let kcskPlot = readyToCalc? plotUtils.genKcskPlot(
     outputState.nomKcsk,
      "Countersink Depth Ratio (tcsk / t) [-]",
      "Joint Strength Knockdown (Kcsk) [-]",
      "Joint Strength Knockdown (nominal data)"
   ) :
-  plotUtils.genScatterPlot(
+  plotUtils.genKcskPlot(
     outputSchema.nomKcsk,
      "Countersink Depth Ratio (tcsk / t) [-]",
      "Joint Strength Knockdown (Kcsk) [-]",
      "Joint Strength Knockdown (nominal data)"
   )
+
+  let rawDataPlot = readyToCalc? plotUtils.genEnvPlot(
+    {points: outputState.rawData.dataset,nomKcsk:outputState.nomKcsk},
+    "Sheet thickness (t) [in]",
+    "Joint Ultimate Strength [lbf]",
+    "Joint Ultimate Strength w/ Bearing-Shear Envelope"
+  ) :
+  plotUtils.genEnvPlot(
+    {points:[],nomKcsk:[]},
+    "Sheet thickness (t) [in]",
+    "Joint Ultimate Strength [lbf]",
+    "Joint Ultimate Strength w/ Bearing-Shear Envelope")
 
   return (
     <ThemeProvider theme={theme}>
@@ -130,13 +146,23 @@ export default function App() {
         <Paper elevation={3} sx={{padding: "10px"}}>
           <Typography variant="subtitle1">Outputs</Typography><br />
           <span>{readyToCalc? "Calculated values (debug use)":"User input required. Press 'Calculate' when ready"}</span>
-          <ul>
+          <Accordion TransitionProps={{unmountOnExit: true}}>
+            <AccordionSummary 
+                expandIcon={<ExpandMoreIcon />} 
+                id="debug-acc-header">
+              <Typography>Debug Info</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+            <ul>
             <li>Fastener dropdown id: {readyToCalc? userInputs.fast_sel: ""}</li>
             <li>Data Source: {readyToCalc? outputState.rawData.metadata.fast_ref: ""}</li>
             <li>User Fbru input: {readyToCalc? userInputs.fbru : ""} [{readyToCalc? userInputs.unit : ""}]</li>
             <li>User Fbru (psi): {(readyToCalc && userInputs.unit!=="psi")?mathUtils.mpa2psi(userInputs.fbru):"no conversion necessary"}</li>
           </ul>
-          {scatterPlot}
+            </AccordionDetails>
+          </Accordion>
+          {rawDataPlot}
+          {kcskPlot}
         </Paper>
         <Footer />
       </Box>
