@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.js": "/csk_knockdown_tool/static/js/main.6668f3a6.chunk.js",
-    "main.js.map": "/csk_knockdown_tool/static/js/main.6668f3a6.chunk.js.map",
+    "main.js": "/csk_knockdown_tool/static/js/main.ee91d2ef.chunk.js",
+    "main.js.map": "/csk_knockdown_tool/static/js/main.ee91d2ef.chunk.js.map",
     "runtime-main.js": "/csk_knockdown_tool/static/js/runtime-main.703af7af.js",
     "runtime-main.js.map": "/csk_knockdown_tool/static/js/runtime-main.703af7af.js.map",
-    "static/js/2.f82c5cff.chunk.js": "/csk_knockdown_tool/static/js/2.f82c5cff.chunk.js",
-    "static/js/2.f82c5cff.chunk.js.map": "/csk_knockdown_tool/static/js/2.f82c5cff.chunk.js.map",
+    "static/js/2.ef8992a7.chunk.js": "/csk_knockdown_tool/static/js/2.ef8992a7.chunk.js",
+    "static/js/2.ef8992a7.chunk.js.map": "/csk_knockdown_tool/static/js/2.ef8992a7.chunk.js.map",
     "index.html": "/csk_knockdown_tool/index.html",
-    "static/js/2.f82c5cff.chunk.js.LICENSE.txt": "/csk_knockdown_tool/static/js/2.f82c5cff.chunk.js.LICENSE.txt"
+    "static/js/2.ef8992a7.chunk.js.LICENSE.txt": "/csk_knockdown_tool/static/js/2.ef8992a7.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.703af7af.js",
-    "static/js/2.f82c5cff.chunk.js",
-    "static/js/main.6668f3a6.chunk.js"
+    "static/js/2.ef8992a7.chunk.js",
+    "static/js/main.ee91d2ef.chunk.js"
   ]
 }
