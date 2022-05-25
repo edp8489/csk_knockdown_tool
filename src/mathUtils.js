@@ -15,11 +15,13 @@ export function lbf2newton(lbf_val){
     return mjs.round(lbf_val*LBF_TO_NEWTON)
   }
 
-export function selectFormat(Fsu_psi){
-  let Fsu_ksi = Fsu_psi/1000
-  let Fsu_MPa = psi2mpa(Fsu_psi)
+export function selectFormat(metadata){
+  let Fsu_ksi = metadata.fast_fsu/1000
+  let Fsu_MPa = psi2mpa(metadata.fast_fsu)
 
-  return (Fsu_ksi + " ksi (" + Fsu_MPa +" MPa)")
+  let formattedString = metadata.fast_type + " ("
+    + metadata.csk_angle + " " + metadata.head_type + ", Fsu: " + Fsu_ksi + " ksi / " + Fsu_MPa +" MPa)"
+  return (formattedString)
 
 }
 export function calcUltKnockdown(t, Pult, tcsk, d, Fbru, Fsu){

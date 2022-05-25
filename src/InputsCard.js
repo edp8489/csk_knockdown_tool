@@ -64,12 +64,12 @@ export default function InputsCard(props){
     </div>
     <div>
     <FormControl sx={{ m: 1, minWidth: 200 }}>
-        <InputLabel id="fastener-select-helper-label">Fastener Fsu</InputLabel>
+        <InputLabel id="fastener-select-helper-label">Fastener Type</InputLabel>
         <Select
           required
           labelId="fastener-select-helper-label"
           id="fastener-select-helper"
-          label="Fastener Fsu"
+          label="Fastener Type"
           name="fast_sel"
           value={props.fastVal}
           onChange={props.hdlChg}
@@ -79,7 +79,7 @@ export default function InputsCard(props){
           </MenuItem>
           {fastSelEntries}
         </Select>
-        <FormHelperText>Fastener Shear Strength</FormHelperText>
+        <FormHelperText>Consider head style and ultimate shear strength</FormHelperText>
       </FormControl>
     </div>
     <Button variant="contained" type="submit">Calculate</Button>

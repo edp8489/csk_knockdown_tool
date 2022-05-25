@@ -27,7 +27,7 @@ let darkTheme = dark
 const cskData = require("./data/csk_data.json")
 //console.log(Object.keys(cskData))
 //console.log(cskData["fastener_data"].map(x=>x.metadata.fast_fsu))
-const fSelDisp = cskData["fastener_data"].map(x=>mathUtils.selectFormat(x.metadata.fast_fsu))
+const fSelDisp = cskData["fastener_data"].map(x=>mathUtils.selectFormat(x.metadata))
 const fSelVal = cskData["fastener_data"].map(x=>x.metadata.id)
 
 const summary = "This tool calculates strength knockdown factors for " +
@@ -145,7 +145,10 @@ export default function App() {
           hdlSub={calculate} />
         <Paper elevation={3} sx={{padding: "10px"}}>
           <Typography variant="subtitle1">Outputs</Typography><br />
-          <span>{readyToCalc? "Calculated values (debug use)":"User input required. Press 'Calculate' when ready"}</span>
+          <span>{readyToCalc? 
+            "Click legend entries to toggle data display":
+            "User input required. Press 'Calculate' when ready"}
+          </span>
           <Accordion TransitionProps={{unmountOnExit: true}}>
             <AccordionSummary 
                 expandIcon={<ExpandMoreIcon />} 
