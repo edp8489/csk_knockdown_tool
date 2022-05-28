@@ -12,6 +12,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {  Chart as ChartJS } from 'chart.js';
 
 // defined using let instead of const in case you want to set
 // other elements later based on primary/secondary colors
@@ -21,18 +22,13 @@ let darkTheme = dark
 // uncomment next line to define additional customizations
 // theme = createTheme(theme, {**});
 
-// DEBUG ONLY
-// define junk data
-//const fsuSelect = ["50 ksi (345 MPa)", "95 ksi (655 MPa)", "108 ksi (745 MPa)"]
+// import data file
+// @TODO change this to a database query
 const cskData = require("./data/csk_data.json")
-//console.log(Object.keys(cskData))
-//console.log(cskData["fastener_data"].map(x=>x.metadata.fast_fsu))
+
+// generate lists for select menu
 const fSelDisp = cskData["fastener_data"].map(x=>mathUtils.selectFormat(x.metadata))
 const fSelVal = cskData["fastener_data"].map(x=>x.metadata.id)
-
-const summary = "This tool calculates strength knockdown factors for " +
-                "single-shear joints based on fastener type, fastener head style, " +
-                "and parent material properties.\nAll strength data comes from from MIL-HDBK-5J / MMPDS-01"
 
 export default function App() {
   const [darkMode, toggleDark] = React.useState(false);
@@ -51,6 +47,10 @@ export default function App() {
   const [outputState, setOutputs] = React.useState(outputSchema)
   
   let theme = darkMode ? darkTheme : lightTheme;
+
+  // set default text properties for chart objects
+  ChartJS.defaults.font.size = 14;
+  ChartJS.defaults.color = "inherit";
 
   const handleChange = function(e) {
     setInputs(prevState => {
@@ -95,26 +95,26 @@ export default function App() {
     }
     e.preventDefault()
   }
-  let kcskPlot = readyToCalc? plotUtils.genKcskPlot(
+  let kcskPlot = readyToCalc? plotUtils.genKcskPlot(ChartJS,
     outputState.nomKcsk,
      "Countersink Depth Ratio (tcsk / t) [-]",
      "Joint Strength Knockdown (Kcsk) [-]",
      "Joint Strength Knockdown (nominal data)"
   ) :
-  plotUtils.genKcskPlot(
+  plotUtils.genKcskPlot(ChartJS,
     outputSchema.nomKcsk,
      "Countersink Depth Ratio (tcsk / t) [-]",
      "Joint Strength Knockdown (Kcsk) [-]",
      "Joint Strength Knockdown (nominal data)"
   )
 
-  let rawDataPlot = readyToCalc? plotUtils.genEnvPlot(
+  let rawDataPlot = readyToCalc? plotUtils.genEnvPlot(ChartJS,
     {points: outputState.rawData.dataset,nomKcsk:outputState.nomKcsk},
     "Sheet thickness (t) [in]",
     "Joint Ultimate Strength [lbf]",
     "Joint Ultimate Strength w/ Bearing-Shear Envelope"
   ) :
-  plotUtils.genEnvPlot(
+  plotUtils.genEnvPlot(ChartJS,
     {points:[],nomKcsk:[]},
     "Sheet thickness (t) [in]",
     "Joint Ultimate Strength [lbf]",
@@ -123,17 +123,38 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box className="App" sx={{ textAlign: "center", width: "75%", marginLeft:"12.5%", marginRight:"12.5%" }}>
+      <Box className="App" sx={{ width: "75%", marginLeft:"12.5%", marginRight:"12.5%" }}>
         <NavBar themeToggle={() => toggleDark( !darkMode )} />
         <Paper elevation={3} sx={{ marginTop: "20px", padding:"10px" }}>
-          <Typography variant="h3">Countersunk Joint Knockdown Calculator</Typography>
+          <Typography component="div">
+          <Box sx={{typography:"h3", textAlign:"center"}}>Countersunk Joint Knockdown Calculator</Box>
           <br />
-          <Typography variant="p">
+          <Box sx={{typography:"p", textAlign:"center"}}>
             (in work)<br />
-            {summary}
+            This tool calculates strength knockdown factors for single-shear joints based on fastener type, fastener head style,
+            and parent material properties. <br />
+            
+            Data source: MIL-HDBK-5J / MMPDS-01.
+          </Box>
+          <br />
+          <Box sx={{typography:"subtitle", textAlign:"center"}}>Usage</Box>
+          <Box sx={{typography:"p", textAlign:"left"}}>
+            Select fastener type from available datasets to generate knockdown curve. 
+            Provide ultimate bearing strength of your specific joint configuration to scale the non-dimensional knockdown
+            curve appropriately.
+            <br /> <br />
+            <b>Sheet Bru:</b> Ultimate shear strength of user sheet material<br />
+            <b>Units:</b> Units for user input <br />
+            <b>Fastener Type:</b> Dataset for knockdown curve generation. Select based on fastener type, head style, and material ultimate shear strength.
+          </Box>
+          <br />
+          <Box sx={{typography:"subtitle", textAlign:"center"}}>Returns</Box>
+          <Box sx={{typography:"p"}}>
+            1. Plot of selected dataset with ultimate bearing-shear envelopes for each diameter <br />
+            2. Plot of non-dimensional strength knockdown vs countersink depth ratio for dataset<br />
+            3. (TODO) Plot of strength knockdown vs countersink depth ratio with bearing-shear envelope scaled by user-supplied Fbru value
+          </Box>
           </Typography>
-          <br />
-          <br />
         </Paper>
         <InputsCard 
           fbruVal={userInputs.fbru}
@@ -142,9 +163,10 @@ export default function App() {
           fastList={fSelVal}
           fastDisp={fSelDisp}
           hdlChg={handleChange}
-          hdlSub={calculate} />
-        <Paper elevation={3} sx={{padding: "10px"}}>
-          <Typography variant="subtitle1">Outputs</Typography><br />
+          hdlSub={calculate}
+          sx={{textAlign:"center"}} />
+        <Paper elevation={3} sx={{padding: "10px", textAlign:"center"}}>
+          <Typography variant="overline">Outputs</Typography><br />
           <span>{readyToCalc? 
             "Click legend entries to toggle data display":
             "User input required. Press 'Calculate' when ready"}
@@ -158,7 +180,7 @@ export default function App() {
             <AccordionDetails>
             <ul>
             <li>Fastener dropdown id: {readyToCalc? userInputs.fast_sel: ""}</li>
-            <li>Data Source: {readyToCalc? outputState.rawData.metadata.fast_ref: ""}</li>
+            <li>Reference: {readyToCalc? outputState.rawData.metadata.fast_ref: ""}</li>
             <li>User Fbru input: {readyToCalc? userInputs.fbru : ""} [{readyToCalc? userInputs.unit : ""}]</li>
             <li>User Fbru (psi): {(readyToCalc && userInputs.unit!=="psi")?mathUtils.mpa2psi(userInputs.fbru):"no conversion necessary"}</li>
           </ul>

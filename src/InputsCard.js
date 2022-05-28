@@ -27,7 +27,7 @@ export default function InputsCard(props){
 
 
   return(
-    <Paper elevation={3} sx={{ marginTop: "10px", marginBottom: "10px", padding:"10px" }}>
+    <Paper elevation={3} sx={{...{ marginTop: "10px", marginBottom: "10px", padding:"10px" },...props.sx}}>
       <Typography variant="overline" >Inputs</Typography>
       <br />
       <Box

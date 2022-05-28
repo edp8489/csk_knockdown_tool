@@ -1,6 +1,6 @@
 import { Chart, Scatter } from 'react-chartjs-2';
 import {
-    Chart as ChartJS,
+    //Chart as ChartJS,
     LinearScale,
     PointElement,
     LineElement,
@@ -51,9 +51,9 @@ export const T10RGB50A = {
 const colorNames = Object.keys(tableau10Hex);
 
 // @TODO Set text color (ChartJS.defaults.color) based on darkMode
-ChartJS.defaults.font.size = 14
+// ChartJS.defaults.font.size = 14
 
-export function genKcskPlot(rawData, xLabel, yLabel, titleText){
+export function genKcskPlot(CJS, rawData, xLabel, yLabel, titleText){
     // define plotting options
     const options = {
         scales: {
@@ -134,11 +134,11 @@ export function genKcskPlot(rawData, xLabel, yLabel, titleText){
     })
     console.log(formattedData)
 
-    ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Title, Legend);
+    CJS.register(LinearScale, PointElement, LineElement, Tooltip, Title, Legend);
     return <Scatter options={options} data={formattedData} />
 }
 
-export function genEnvPlot(rawData, xLabel, yLabel, titleText){
+export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
     /*
         rawData = {
             points: [selectedData.dataset],
@@ -253,6 +253,6 @@ export function genEnvPlot(rawData, xLabel, yLabel, titleText){
     formattedData["datasets"] = ultPts.concat(envPlots)
     console.log(formattedData)
 
-    ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Title, Legend);
+    CJS.register(LinearScale, PointElement, LineElement, Tooltip, Title, Legend);
     return <Scatter options={options} data={formattedData} />
 }
