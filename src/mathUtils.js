@@ -70,3 +70,12 @@ export function jointStrengthEnvelope(t, d, Fbru, Fsu){
  let Penv = Pbru.map((P_i)=>mjs.min(P_i,Psu));
  return Penv
 }
+
+export function genPlotPenv({tmin, tmax}, d, Fbru, Fsu){
+  let Psu = mjs.evaluate("F*pi*(d^2)/4",{d:d, F:Fsu,pi:mjs.pi});
+  let teq = mjs.evaluate("Ps/(Fbr*d)",{Ps:Psu, d:d, Fbr:Fbru});
+  let tenv = [tmin, teq, tmax];
+  let Penv = [mjs.evaluate("Fbr*t*d",{Fbr:Fbru, t:tmin, d:d}),
+  Psu, Psu]
+  return {tenv, Penv}
+}

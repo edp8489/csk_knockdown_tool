@@ -199,9 +199,8 @@ export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
     */
     let formattedData = {}
     let ultPts = rawData.points.map((el, ind) => {
-        //todo
-        console.log("el: ")
-        console.log(el)
+        //console.log("el: ")
+        //console.log(el)
         let label = "d = " + el.d + " in"
         let xData = el.tsht
         let yData = el.Pult
@@ -226,6 +225,7 @@ export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
     //console.log(formattedData)
     const envPlots = rawData.nomKcsk.map((el, ind) => {
         //todo
+        console.log("Generating envelope plot")
         console.log("el: ")
         console.log(el)
         let label = "Strength Envelope"

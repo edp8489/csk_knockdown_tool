@@ -95,14 +95,8 @@ export default function App() {
     }
     e.preventDefault()
   }
-  let kcskPlot = readyToCalc? plotUtils.genKcskPlot(ChartJS,
+  let kcskPlot = plotUtils.genKcskPlot(ChartJS,
     outputState.nomKcsk,
-     "Countersink Depth Ratio (tcsk / t) [-]",
-     "Joint Strength Knockdown (Kcsk) [-]",
-     "Joint Strength Knockdown (nominal data)"
-  ) :
-  plotUtils.genKcskPlot(ChartJS,
-    outputSchema.nomKcsk,
      "Countersink Depth Ratio (tcsk / t) [-]",
      "Joint Strength Knockdown (Kcsk) [-]",
      "Joint Strength Knockdown (nominal data)"
@@ -137,23 +131,29 @@ export default function App() {
             Data source: MIL-HDBK-5J / MMPDS-01.
           </Box>
           <br />
-          <Box sx={{typography:"subtitle", textAlign:"center"}}>Usage</Box>
-          <Box sx={{typography:"p", textAlign:"left"}}>
-            Select fastener type from available datasets to generate knockdown curve. 
-            Provide ultimate bearing strength of your specific joint configuration to scale the non-dimensional knockdown
-            curve appropriately.
-            <br /> <br />
-            <b>Sheet Bru:</b> Ultimate shear strength of user sheet material<br />
-            <b>Units:</b> Units for user input <br />
-            <b>Fastener Type:</b> Dataset for knockdown curve generation. Select based on fastener type, head style, and material ultimate shear strength.
-          </Box>
-          <br />
-          <Box sx={{typography:"subtitle", textAlign:"center"}}>Returns</Box>
-          <Box sx={{typography:"p"}}>
-            1. Plot of selected dataset with ultimate bearing-shear envelopes for each diameter <br />
-            2. Plot of non-dimensional strength knockdown vs countersink depth ratio for dataset<br />
-            3. (TODO) Plot of strength knockdown vs countersink depth ratio with bearing-shear envelope scaled by user-supplied Fbru value
-          </Box>
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                id="instructions-acc-header">Instructions</AccordionSummary>
+              <AccordionDetails>
+                <Box sx={{ typography: "p", textAlign: "left" }}>
+                  Select fastener type from available datasets to generate knockdown curve.
+                  Provide ultimate bearing strength of your specific joint configuration to scale the non-dimensional knockdown
+                  curve appropriately.
+                  <br /> <br />
+                  <b>Sheet Bru:</b> Ultimate shear strength of user sheet material<br />
+                  <b>Units:</b> Units for user input <br />
+                  <b>Fastener Type:</b> Dataset for knockdown curve generation. Select based on fastener type, head style, and material ultimate shear strength.
+                </Box>
+                <br />
+                <Box sx={{ typography: "subtitle", textAlign: "center" }}>Returns</Box>
+                <Box sx={{ typography: "p" }}>
+                  1. Plot of selected dataset with ultimate bearing-shear envelopes for each diameter <br />
+                  2. Plot of non-dimensional strength knockdown vs countersink depth ratio for dataset<br />
+                  3. (TODO) Plot of strength knockdown vs countersink depth ratio with bearing-shear envelope scaled by user-supplied Fbru value
+                </Box>
+              </AccordionDetails>
+            </Accordion>
           </Typography>
         </Paper>
         <InputsCard 

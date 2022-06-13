@@ -1,0 +1,24 @@
+{
+  "schema":{
+    "metadata":{
+      "id":"",
+      "fast_ref": "",
+      "fast_type": "",
+      "fast_fsu": 0,
+      "fast_mat":"",
+      "sht_mat": "",
+      "sht_ref": "",
+      "sht_fbru2A": 0,
+      "sht_fbry2A": 0,
+      "units":"",
+      "head_type":""
+  },
+  "dataset":[{
+    "d":0,
+    "tsht":[],
+    "Pult":[],
+    "Pyld":[]
+  }]
+},
+  "fastener_data":[]
+}

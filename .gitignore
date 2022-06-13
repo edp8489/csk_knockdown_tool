@@ -12,6 +12,7 @@ yarn-error.log*
 # Dependency directories
 node_modules/
 jspm_packages/
+.yarn/
 
 # Build directory
 build/
