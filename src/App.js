@@ -50,7 +50,7 @@ export default function App() {
 
   // set default text properties for chart objects
   ChartJS.defaults.font.size = 14;
-  ChartJS.defaults.color = "inherit";
+  ChartJS.defaults.color = theme.palette.text.primary;
 
   const handleChange = function(e) {
     setInputs(prevState => {
@@ -124,7 +124,7 @@ export default function App() {
           <Box sx={{typography:"h3", textAlign:"center"}}>Countersunk Joint Knockdown Calculator</Box>
           <br />
           <Box sx={{typography:"p", textAlign:"center"}}>
-            (in work)<br />
+            (<em>June 2022 - in work</em>)<br />
             This tool calculates strength knockdown factors for single-shear joints based on fastener type, fastener head style,
             and parent material properties. <br />
             
