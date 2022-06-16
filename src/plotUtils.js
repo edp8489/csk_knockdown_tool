@@ -1,4 +1,4 @@
-import { Chart, Scatter } from 'react-chartjs-2';
+import { Scatter } from 'react-chartjs-2';
 import {
     //Chart as ChartJS,
     LinearScale,
@@ -48,7 +48,7 @@ export const T10RGB50A = {
     grey: "rgba(184, 176, 172, 0.5)"
 }
 
-const colorNames = Object.keys(tableau10Hex);
+export const colorNames = Object.keys(tableau10Hex);
 
 // @TODO Set text color (ChartJS.defaults.color) based on darkMode
 // ChartJS.defaults.font.size = 14
@@ -136,6 +136,48 @@ export function genKcskPlot(CJS, rawData, xLabel, yLabel, titleText){
 
     CJS.register(LinearScale, PointElement, LineElement, Tooltip, Title, Legend);
     return <Scatter options={options} data={formattedData} />
+}
+
+export function formatData(xData, yData, seriesName) {
+    /*
+    Utility function to format dataset for use in ChartJS
+    
+    Inputs:
+        xData: array of x-axis data points
+        yData: array of y-axis data points
+        seriesName: Label for data series (legend entry)
+
+    Returns: 
+        series = {
+                    label: seriesName,
+                    data: [
+                        {
+                        x: #,
+                        y: #
+                        }
+                    ],
+                    borderColor: ...,
+                    backgroundColor: ...
+                }
+    
+    Usage: 
+    Formatted series can be appended to "datasets" array in CJS data object:
+        data = {
+            datasets: [
+                series, ...
+            ],
+        }
+    */
+
+    const dataTuples = xData.map((x, ind) => {return {x: x, y:yData[ind]}})
+
+    const series = {
+        label: seriesName,
+        data: dataTuples
+    }
+
+    return series
+
 }
 
 export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
@@ -229,8 +271,9 @@ export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
         console.log("el: ")
         console.log(el)
         let label = "Strength Envelope"
-        let xData = rawData.points[ind].tsht
-        let yData = el.Penv
+        //let xData = rawData.points[ind].tsht
+        let xData = el.plotPenv? el.plotPenv.tenv : []
+        let yData = el.plotPenv? el.plotPenv.Penv: []
         let borderColor = T10RGB[colorNames[ind]]
         //console.log(borderColor)
         let backgroundColor = T10RGB50A[colorNames[ind]]
@@ -251,7 +294,7 @@ export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
     })
     //formattedData["datasets"].append(envPlots)
     formattedData["datasets"] = ultPts.concat(envPlots)
-    console.log(formattedData)
+    //console.log(formattedData)
 
     CJS.register(LinearScale, PointElement, LineElement, Tooltip, Title, Legend);
     return <Scatter options={options} data={formattedData} />

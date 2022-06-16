@@ -24,7 +24,7 @@ export function selectFormat(metadata){
   return (formattedString)
 
 }
-export function calcUltKnockdown(t, Pult, tcsk, d, Fbru, Fsu){
+export function calcUltKnockdown(t, P, tcsk, d, Fbru, Fsu){
   /*
   Calculates nondimensional joint knockdown based on supplied data
   INPUTS
@@ -40,15 +40,17 @@ export function calcUltKnockdown(t, Pult, tcsk, d, Fbru, Fsu){
     Kcsk: Non-dimensional strength knockdown P/(joint bearing/shear envelope)
   */
  let Penv = jointStrengthEnvelope(t,d,Fbru,Fsu);
+ let plotPenv = genPlotPenv({tmin: mjs.min(t), tmax: mjs.max(t)},d, Fbru, Fsu);
+ console.log(plotPenv)
 
  // calculate csk depth ratio for all sheet thicknesses
  let tcsk_t = mjs.dotDivide(tcsk,t);
  //console.log(tcsk_t)
 
  // calculate Kcsk for valid data pairs
- let Kcsk = Pult.map((x, ind) => mjs.evaluate("a/b",{a:x, b:Penv[ind]}))
+ let Kcsk = P.map((x, ind) => mjs.evaluate("a/b",{a:x, b:Penv[ind]}))
 
-  return {tcsk_t, Kcsk, Penv, d }
+  return {tcsk_t, Kcsk, plotPenv, d }
 }
 
 export function calcUserKnockdown(userFbru, nomKcsk) {

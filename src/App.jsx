@@ -4,8 +4,8 @@ import { Box, Paper } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import {light, dark} from "./styles.js";
-import {NavBar, Footer} from "./NavBar";
-import InputsCard from "./InputsCard";
+import {NavBar, Footer} from "./components/NavBar";
+import InputsCard from "./components/InputsCard";
 import * as mathUtils from "./mathUtils"
 import * as plotUtils from "./plotUtils"
 import Accordion from '@mui/material/Accordion';
