@@ -37,6 +37,26 @@ export default function InputsCard(props){
       onSubmit={props.hdlSub}
     >
       <div>
+    <FormControl sx={{ m: 1, minWidth: 200 }}>
+        <InputLabel id="fastener-select-helper-label">Fastener Type</InputLabel>
+        <Select
+          required
+          labelId="fastener-select-helper-label"
+          id="fastener-select-helper"
+          label="Fastener Type"
+          name="fast_sel"
+          value={props.fastVal}
+          onChange={props.hdlChg}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {fastSelEntries}
+        </Select>
+        <FormHelperText>Consider head style and ultimate shear strength</FormHelperText>
+      </FormControl>
+    </div>
+      <div>
       <FormControl sx={{margin:"10px"}}>
       <TextField
           required
@@ -61,26 +81,6 @@ export default function InputsCard(props){
         <FormControlLabel value="MPa" control={<Radio />} label="MPa" />
       </RadioGroup>
     </FormControl>
-    </div>
-    <div>
-    <FormControl sx={{ m: 1, minWidth: 200 }}>
-        <InputLabel id="fastener-select-helper-label">Fastener Type</InputLabel>
-        <Select
-          required
-          labelId="fastener-select-helper-label"
-          id="fastener-select-helper"
-          label="Fastener Type"
-          name="fast_sel"
-          value={props.fastVal}
-          onChange={props.hdlChg}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {fastSelEntries}
-        </Select>
-        <FormHelperText>Consider head style and ultimate shear strength</FormHelperText>
-      </FormControl>
     </div>
     <Button variant="contained" type="submit">Calculate</Button>
     </Box>

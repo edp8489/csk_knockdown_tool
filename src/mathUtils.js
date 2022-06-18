@@ -37,7 +37,7 @@ export function calcUltKnockdown(t, P, tcsk, d, Fbru, Fsu){
 
   RETURNS
     tcsk_t: countersink depth ratio tcsk/t
-    Kcsk: Non-dimensional strength knockdown P/(joint bearing/shear envelope)
+    Kcsk: Non-dimensional strength knockdown P/(joint bearing-shear envelope)
   */
  let Penv = jointStrengthEnvelope(t,d,Fbru,Fsu);
  let plotPenv = genPlotPenv({tmin: mjs.min(t), tmax: mjs.max(t)},d, Fbru, Fsu);
@@ -53,8 +53,18 @@ export function calcUltKnockdown(t, P, tcsk, d, Fbru, Fsu){
   return {tcsk_t, Kcsk, plotPenv, d }
 }
 
-export function calcUserKnockdown(userFbru, nomKcsk) {
+export function calcUserKnockdown(nomKcsk, dataFbru, userFbru) {
   // @TODO
+  /*
+  Scales Kcsk curve by ratio of (raw data)/(user-supplied) Fbru values
+  INPUTS
+    nomKcsk: {tcsk_t, Kcsk} data
+    dataFbru: Ultimate bearing strength value for dataset
+    userFbru: User-supplied ultimate bearing strength
+
+  RETURNS
+    
+  */
 }
 
 export function jointStrengthEnvelope(t, d, Fbru, Fsu){

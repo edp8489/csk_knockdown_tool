@@ -50,8 +50,47 @@ export const T10RGB50A = {
 
 export const colorNames = Object.keys(tableau10Hex);
 
-// @TODO Set text color (ChartJS.defaults.color) based on darkMode
-// ChartJS.defaults.font.size = 14
+export function formatData(xData, yData, seriesName) {
+    /*
+    Utility function to format dataset for use in ChartJS
+    
+    Inputs:
+        xData: array of x-axis data points
+        yData: array of y-axis data points
+        seriesName: Label for data series (legend entry)
+
+    Returns: 
+        series = {
+                    label: seriesName,
+                    data: [
+                        {
+                        x: #,
+                        y: #
+                        }
+                    ],
+                    borderColor: ...,
+                    backgroundColor: ...
+                }
+    
+    Usage: 
+    Formatted series can be appended to "datasets" array in CJS data object:
+        data = {
+            datasets: [
+                series, ...
+            ],
+        }
+    */
+
+    const dataTuples = xData.map((x, ind) => {return {x: x, y:yData[ind]}})
+
+    const series = {
+        label: seriesName,
+        data: dataTuples
+    }
+
+    return series
+
+}
 
 export function genKcskPlot(CJS, rawData, xLabel, yLabel, titleText){
     // define plotting options
@@ -107,9 +146,8 @@ export function genKcskPlot(CJS, rawData, xLabel, yLabel, titleText){
     */
     let formattedData = {}
     formattedData["datasets"] = rawData.map((el, ind) => {
-        //todo
-        console.log("el: ")
-        console.log(el)
+        //console.log("el: ")
+        //console.log(el)
         let label = "d = " + el.d + " in"
         let xData = el.tcsk_t
         let yData = el.Kcsk
@@ -117,68 +155,31 @@ export function genKcskPlot(CJS, rawData, xLabel, yLabel, titleText){
         //console.log(borderColor)
         let backgroundColor = T10RGB50A[colorNames[ind]]
         //console.log(backgroundColor)
-        let dataTuples = xData.map((x, ind) => {return {x: x, y:yData[ind]}})
 
-        // package everything
-        let dataset_i = {
-            label: label,
-            data: dataTuples,
-            pointBorderColor: borderColor,
-            pointBackgroundColor: backgroundColor,
-            pointRadius:4,
-            borderColor: backgroundColor,
-            backgroundColor:backgroundColor,
-            showLine: true
+        // format x- and y- data arrays into ChartJS structure
+        let dataset_i = formatData(xData, yData, label);
+        
+        // add additional properties to dataset
+        dataset_i = {
+            ...dataset_i,
+            ...{
+                pointBorderColor: borderColor,
+                pointBackgroundColor: backgroundColor,
+                pointRadius:4,
+                borderColor: backgroundColor,
+                backgroundColor:backgroundColor,
+                showLine: true
+                }
         }
         return dataset_i
     })
-    console.log(formattedData)
+    //console.log(formattedData)
 
     CJS.register(LinearScale, PointElement, LineElement, Tooltip, Title, Legend);
     return <Scatter options={options} data={formattedData} />
 }
 
-export function formatData(xData, yData, seriesName) {
-    /*
-    Utility function to format dataset for use in ChartJS
-    
-    Inputs:
-        xData: array of x-axis data points
-        yData: array of y-axis data points
-        seriesName: Label for data series (legend entry)
 
-    Returns: 
-        series = {
-                    label: seriesName,
-                    data: [
-                        {
-                        x: #,
-                        y: #
-                        }
-                    ],
-                    borderColor: ...,
-                    backgroundColor: ...
-                }
-    
-    Usage: 
-    Formatted series can be appended to "datasets" array in CJS data object:
-        data = {
-            datasets: [
-                series, ...
-            ],
-        }
-    */
-
-    const dataTuples = xData.map((x, ind) => {return {x: x, y:yData[ind]}})
-
-    const series = {
-        label: seriesName,
-        data: dataTuples
-    }
-
-    return series
-
-}
 
 export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
     /*
@@ -188,7 +189,7 @@ export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
         }
     */
     // define plotting options
-    console.log(rawData)
+    //console.log(rawData)
     const options = {
         scales: {
             x:{
@@ -250,17 +251,21 @@ export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
         //console.log(borderColor)
         let backgroundColor = T10RGB50A[colorNames[ind]]
         //console.log(backgroundColor)
-        let dataTuples = xData.map((x, ind) => {return {x: x, y:yData[ind]}})
+        //let dataTuples = xData.map((x, ind) => {return {x: x, y:yData[ind]}})
 
-        // package everything
-        let dataset_i = {
-            label: label,
-            data: dataTuples,
-            pointBorderColor: borderColor,
-            pointBackgroundColor: backgroundColor,
-            borderColor: backgroundColor,
-            backgroundColor:backgroundColor,
-            showLine: true
+        // format x- and y- data arrays in ChartJS structure
+        let dataset_i = formatData(xData,yData,label)
+        
+        // add additional options
+        dataset_i = {
+            ...dataset_i,
+            ...{
+                pointBorderColor: borderColor,
+                pointBackgroundColor: backgroundColor,
+                borderColor: backgroundColor,
+                backgroundColor:backgroundColor,
+                showLine: true
+            }
         }
         return dataset_i
     })
@@ -268,8 +273,8 @@ export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
     const envPlots = rawData.nomKcsk.map((el, ind) => {
         //todo
         console.log("Generating envelope plot")
-        console.log("el: ")
-        console.log(el)
+        //console.log("el: ")
+        //console.log(el)
         let label = "Strength Envelope"
         //let xData = rawData.points[ind].tsht
         let xData = el.plotPenv? el.plotPenv.tenv : []
@@ -280,16 +285,20 @@ export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
         //console.log(backgroundColor)
         let dataTuples = xData.map((x, ind) => {return {x: x, y:yData[ind]}})
 
-        // package everything
-        let dataset_i = {
-            label: label,
-            data: dataTuples,
-            pointRadius: 0,
-            borderColor: borderColor,
-            backgroundColor:backgroundColor,
-            borderDash: [10, 10],
-            showLine: true
-        }
+        // format x- and y- arrays into ChartJS structure
+        let dataset_i = formatData(xData,yData,label)
+
+        // add additional options
+        dataset_i = {
+            ...dataset_i,
+            ...{
+                pointRadius: 0,
+                borderColor: borderColor,
+                backgroundColor:backgroundColor,
+                borderDash: [10, 10],
+                showLine: true
+                }
+            }
         return dataset_i
     })
     //formattedData["datasets"].append(envPlots)
