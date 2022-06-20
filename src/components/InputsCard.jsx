@@ -59,7 +59,7 @@ export default function InputsCard(props){
       <div>
       <FormControl sx={{margin:"10px"}}>
       <TextField
-          required
+          disabled
           id="fbru-input"
           label="Sheet Fbru"
           type="number"
@@ -77,8 +77,8 @@ export default function InputsCard(props){
         value={props.unitVal}
         onChange={props.hdlChg}
       >
-        <FormControlLabel value="psi" control={<Radio />} label="psi" />
-        <FormControlLabel value="MPa" control={<Radio />} label="MPa" />
+        <FormControlLabel disabled value="psi" control={<Radio />} label="psi" />
+        <FormControlLabel disabled value="MPa" control={<Radio />} label="MPa" />
       </RadioGroup>
     </FormControl>
     </div>

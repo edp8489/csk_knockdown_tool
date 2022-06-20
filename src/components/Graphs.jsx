@@ -40,9 +40,9 @@ export function DataEnvPlot(props){
       scales: {
           x:{
               type:"linear",
-              //min: 0,
+              min: 0.01,
               //max: 1,
-              beginAtZero: true,
+              //beginAtZero: true,
               title: {
                   display:true, 
                   text: "Sheet thickness (t) [in]"
@@ -99,7 +99,7 @@ export function KcskPlot(props){
         x:{
             type:"linear",
             min: 0,
-            max: 1,
+            // max: 1,
             beginAtZero: true,
             title: {
                 display:true, 

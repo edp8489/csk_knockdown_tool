@@ -40,8 +40,6 @@ export function calcUltKnockdown(t, P, tcsk, d, Fbru, Fsu){
     Kcsk: Non-dimensional strength knockdown P/(joint bearing-shear envelope)
   */
  let Penv = jointStrengthEnvelope(t,d,Fbru,Fsu);
- let plotPenv = genPlotPenv({tmin: mjs.min(t), tmax: mjs.max(t)},d, Fbru, Fsu);
- console.log(plotPenv)
 
  // calculate csk depth ratio for all sheet thicknesses
  let tcsk_t = mjs.dotDivide(tcsk,t);
@@ -50,21 +48,7 @@ export function calcUltKnockdown(t, P, tcsk, d, Fbru, Fsu){
  // calculate Kcsk for valid data pairs
  let Kcsk = P.map((x, ind) => mjs.evaluate("a/b",{a:x, b:Penv[ind]}))
 
-  return {tcsk_t, Kcsk, plotPenv, d }
-}
-
-export function calcUserKnockdown(nomKcsk, dataFbru, userFbru) {
-  // @TODO
-  /*
-  Scales Kcsk curve by ratio of (raw data)/(user-supplied) Fbru values
-  INPUTS
-    nomKcsk: {tcsk_t, Kcsk} data
-    dataFbru: Ultimate bearing strength value for dataset
-    userFbru: User-supplied ultimate bearing strength
-
-  RETURNS
-    
-  */
+  return {tcsk_t, Kcsk, d }
 }
 
 export function jointStrengthEnvelope(t, d, Fbru, Fsu){
@@ -83,11 +67,42 @@ export function jointStrengthEnvelope(t, d, Fbru, Fsu){
  return Penv
 }
 
-export function genPlotPenv({tmin, tmax}, d, Fbru, Fsu){
+export function genPlotPenv(t, d, Fbru, Fsu){
+  /*
+  Calculates bearing-shear strength envelope plot for given thickness range,
+  fastener diameter, and material strengths
+  INPUTS
+    tmin: minimum sheet thickness to begin envelope [in]
+    tmax: maximum sheet thickness to end envelope [in]
+    d:    fastener diameter [in]
+    Fbru: Material ultimate bearing strength [psi]
+    Fsu:  fastener ultimate shear strength [psi]
+  
+  RETURNS
+    {
+      d: fastener diameter
+      tenv: array of thickness values for envelope plot [in]
+      Penv: array of ultimate strength values for envelope plot [lbf]
+    }
+  */
+
+  let tmin = mjs.min(t)
+  let tmax = mjs.max(t)
   let Psu = mjs.evaluate("F*pi*(d^2)/4",{d:d, F:Fsu,pi:mjs.pi});
   let teq = mjs.evaluate("Ps/(Fbr*d)",{Ps:Psu, d:d, Fbr:Fbru});
+
+  // calculate thickness where sheet Pbru = fastener Psu
   let tenv = [tmin, teq, tmax];
   let Penv = [mjs.evaluate("Fbr*t*d",{Fbr:Fbru, t:tmin, d:d}),
   Psu, Psu]
-  return {tenv, Penv}
+
+  let plotPenv = {d, tenv, Penv}
+  return plotPenv
+}
+
+export function calcGenericKnd(tcsk_t){
+  /*
+  Calculates a generic knockdown curve based on available data
+  @TODO
+  */
 }

@@ -92,60 +92,141 @@ export function formatData(xData, yData, seriesName) {
 
 }
 
-export function genKcskPlot(CJS, rawData, xLabel, yLabel, titleText){
-    // define plotting options
-    const options = {
-        scales: {
-            x:{
-                type:"linear",
-                min: 0,
-                max: 1,
-                beginAtZero: true,
-                title: {
-                    display:true, 
-                    text:xLabel}
-            },
-            y:{
-                type:"linear",
-                min:0.5,
-                max:1.1,
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: yLabel}
-            }
-        },
-        plugins: {
-            legend:{
-                position: "right"
-            },
-            title:{
-                display: true,
-                text: titleText
-            }
-        }
-    }
+export function fmtEnvPlotData(dataObj){
+    /*
+    Formats data for use in plot of data points w/ bearing-shear strength envelope
 
-    // prepare raw data for plotting
-    /* content:
-        data = {
-            datasets: [
-                {
-                    label: "d = ## in",
+    INPUTS
+        dataObj: {
+            points: [{
+                d = number,
+                tsht: [],
+                Pult: []
+            }],
+            envelope: [{
+                d: number,
+                tenv: [],
+                Penv: []
+            }]
+        }
+    
+    RETURNS
+        formattedData: {
+        datasets: [
+                    {
+                    label: "",
                     data: [
                         {
-                        x: [],
-                        y: []
+                        x: (scalar),
+                        y: (scalar)
                         }
-                    ],
-                    borderColor: "",
-                    backgroundColor: ""
+                    ]
+                    }
+                ]
+        }
+    */
+    
+    const ultPts = dataObj.points.map((el, ind) => {
+        //console.log("el: ")
+        //console.log(el)
+        let label = "d = " + el.d + " in"
+        let xData = el.tsht
+        let yData = el.Pult
+        let borderColor = T10RGB[colorNames[ind]]
+        //console.log(borderColor)
+        let backgroundColor = T10RGB50A[colorNames[ind]]
+        //console.log(backgroundColor)
+
+        // format x- and y- data arrays in ChartJS structure
+        let dataset_i = formatData(xData,yData,label)
+        
+        // add additional options
+        dataset_i = {
+            ...dataset_i,
+            ...{
+                pointBorderColor: borderColor,
+                pointBackgroundColor: backgroundColor,
+                borderColor: backgroundColor,
+                backgroundColor:backgroundColor,
+                showLine: true
+            }
+        }
+        return dataset_i
+    })
+
+    const envPlots = dataObj.envelope.map((el, ind) => {
+        //todo
+        console.log("Generating envelope plot")
+        //console.log("el: ")
+        //console.log(el)
+        let label = "Strength Envelope"
+        //let xData = rawData.points[ind].tsht
+        let xData = el.tenv 
+        let yData = el.Penv
+        let borderColor = T10RGB[colorNames[ind]]
+        //console.log(borderColor)
+        let backgroundColor = T10RGB50A[colorNames[ind]]
+        //console.log(backgroundColor)
+
+        // format x- and y- arrays into ChartJS structure
+        let dataset_i = formatData(xData,yData,label)
+
+        // add additional options
+        dataset_i = {
+            ...dataset_i,
+            ...{
+                pointRadius: 0,
+                borderColor: borderColor,
+                backgroundColor:backgroundColor,
+                borderDash: [10, 10],
+                showLine: true
                 }
-            ],
+            }
+        return dataset_i
+    })
+
+    // alternate between data points and envelope plots so legend entries are grouped
+    let formattedData = {datasets:[]}
+    ultPts.forEach((el, ind) =>{
+        formattedData['datasets'].push(el)
+        // only add envelope plot if it correlates w/ same diameter fastener
+        if (dataObj.envelope[ind].d === dataObj.points[ind].d){
+            formattedData['datasets'].push(envPlots[ind])}
+    })
+    console.log("formatted envelope plot data obj:")
+    console.log(formattedData)
+    return formattedData
+}
+
+export function fmtKndPlotData(dataObj){
+    /*
+    Formats data for use in plot of data points w/ bearing-shear strength envelope
+
+    INPUTS
+        dataObj: [{
+            d: (scalar) fastener diameter
+            tcsk_t: (array)
+            Kcsk: (array)
+        }]
+
+    RETURNS
+      Object in ChartJS syntax
+        formattedData: {
+          datasets: [
+                    {
+                    label: "",
+                    data: [
+                        {
+                        x: (scalar),
+                        y: (scalar)
+                        }
+                    ]
+                    }
+                ]
         }
     */
     let formattedData = {}
-    formattedData["datasets"] = rawData.map((el, ind) => {
+    formattedData["datasets"] = dataObj.map((el, ind) => {
         //console.log("el: ")
         //console.log(el)
         let label = "d = " + el.d + " in"
@@ -173,138 +254,6 @@ export function genKcskPlot(CJS, rawData, xLabel, yLabel, titleText){
         }
         return dataset_i
     })
-    //console.log(formattedData)
 
-    CJS.register(LinearScale, PointElement, LineElement, Tooltip, Title, Legend);
-    return <Scatter options={options} data={formattedData} />
-}
-
-
-
-export function genEnvPlot(CJS, rawData, xLabel, yLabel, titleText){
-    /*
-        rawData = {
-            points: [selectedData.dataset],
-            Penv: [nomCsk.Penv]
-        }
-    */
-    // define plotting options
-    //console.log(rawData)
-    const options = {
-        scales: {
-            x:{
-                type:"linear",
-                //min: 0,
-                //max: 1,
-                beginAtZero: true,
-                title: {
-                    display:true, 
-                    text:xLabel}
-            },
-            y:{
-                type:"linear",
-                //min:0.5,
-                //max:1.1,
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: yLabel}
-            }
-        },
-        plugins: {
-            legend:{
-                position: "top"
-            },
-            title:{
-                display: true,
-                text: titleText
-            }
-        }
-    }
-
-    // prepare raw data for plotting
-    /* content:
-        data = {
-            datasets: [
-                {
-                    label: "d = ## in",
-                    data: [
-                        {
-                        x: [],
-                        y: []
-                        }
-                    ],
-                    borderColor: "",
-                    backgroundColor: ""
-                }
-            ],
-        }
-    */
-    let formattedData = {}
-    let ultPts = rawData.points.map((el, ind) => {
-        //console.log("el: ")
-        //console.log(el)
-        let label = "d = " + el.d + " in"
-        let xData = el.tsht
-        let yData = el.Pult
-        let borderColor = T10RGB[colorNames[ind]]
-        //console.log(borderColor)
-        let backgroundColor = T10RGB50A[colorNames[ind]]
-        //console.log(backgroundColor)
-        //let dataTuples = xData.map((x, ind) => {return {x: x, y:yData[ind]}})
-
-        // format x- and y- data arrays in ChartJS structure
-        let dataset_i = formatData(xData,yData,label)
-        
-        // add additional options
-        dataset_i = {
-            ...dataset_i,
-            ...{
-                pointBorderColor: borderColor,
-                pointBackgroundColor: backgroundColor,
-                borderColor: backgroundColor,
-                backgroundColor:backgroundColor,
-                showLine: true
-            }
-        }
-        return dataset_i
-    })
-    //console.log(formattedData)
-    const envPlots = rawData.nomKcsk.map((el, ind) => {
-        //todo
-        console.log("Generating envelope plot")
-        //console.log("el: ")
-        //console.log(el)
-        let label = "Strength Envelope"
-        //let xData = rawData.points[ind].tsht
-        let xData = el.plotPenv? el.plotPenv.tenv : []
-        let yData = el.plotPenv? el.plotPenv.Penv: []
-        let borderColor = T10RGB[colorNames[ind]]
-        //console.log(borderColor)
-        let backgroundColor = T10RGB50A[colorNames[ind]]
-        //console.log(backgroundColor)
-        let dataTuples = xData.map((x, ind) => {return {x: x, y:yData[ind]}})
-
-        // format x- and y- arrays into ChartJS structure
-        let dataset_i = formatData(xData,yData,label)
-
-        // add additional options
-        dataset_i = {
-            ...dataset_i,
-            ...{
-                pointRadius: 0,
-                borderColor: borderColor,
-                backgroundColor:backgroundColor,
-                borderDash: [10, 10],
-                showLine: true
-                }
-            }
-        return dataset_i
-    })
-    //formattedData["datasets"].append(envPlots)
-    formattedData["datasets"] = ultPts.concat(envPlots)
-    //console.log(formattedData)
-
-    CJS.register(LinearScale, PointElement, LineElement, Tooltip, Title, Legend);
-    return <Scatter options={options} data={formattedData} />
+    return formattedData
 }
