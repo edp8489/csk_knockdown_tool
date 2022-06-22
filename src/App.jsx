@@ -6,6 +6,7 @@ import React from "react";
 import { light, dark } from "./styles.js";
 import { NavBar, Footer } from "./components/NavBar";
 import InputsCard from "./components/InputsCard";
+import InfoPanel from "./components/InfoPanel";
 import * as mathUtils from "./mathUtils"
 import * as plotUtils from "./plotUtils"
 import Accordion from '@mui/material/Accordion';
@@ -183,21 +184,6 @@ export default function App() {
               </AccordionDetails>
             </Accordion>
             
-            <Accordion TransitionProps={{ unmountOnExit: true }}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="debug-acc-header">
-                <Typography>Debug Info</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <ul>
-                  <li>Fastener dropdown id: {readyToCalc ? userInputs.fast_sel : ""}</li>
-                  <li>Reference: {readyToCalc ? outputState.rawData.metadata.fast_ref : ""}</li>
-                  <li>User Fbru input: {readyToCalc ? userInputs.fbru : ""} [{readyToCalc ? userInputs.unit : ""}]</li>
-                  <li>User Fbru (psi): {(readyToCalc && userInputs.unit !== "psi") ? mathUtils.mpa2psi(userInputs.fbru) : "no conversion necessary"}</li>
-                </ul>
-              </AccordionDetails>
-            </Accordion>
           </Typography>
         </Paper>
         <InputsCard
@@ -211,11 +197,12 @@ export default function App() {
           sx={{ textAlign: "center" }} />
         <Paper elevation={3} sx={{ padding: "10px", textAlign: "center" }}>
           <Typography variant="overline">Outputs</Typography><br />
+          <InfoPanel expanded={readyToCalc} metadata={outputState.rawData.metadata} />
+          <br />
           <span>{readyToCalc ?
             "Click legend entries to toggle data display" :
             "User input required. Press 'Calculate' when ready"}
           </span>
-
           <DataEnvPlot CJS={ChartJS} data={outputState.graph1CJS} />
           <KcskPlot CJS={ChartJS} data={outputState.graph2CJS} userScaled={false} />
         </Paper>
