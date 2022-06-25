@@ -1,35 +1,28 @@
-import {useEffect, useState} from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from "@mui/material/Typography";
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 /**
-* Accordion panel showing metadata for the selected dataset
+* Box showing metadata for the selected dataset
 * @component
-*
-* @todo control whether panel is expanded or not based on props
+* @param {boolean} display - Toggle visibility of component
+* @param {Object} metadata - Metadata for selected dataset
+* @param {Object[]} dataset - Strength data for selected dataset
 * @todo Head style formatting for protruding head data
 */
+
 export default function InfoPanel(props) {
     
 
     // unpack dataset from props
     const {fast_ref, fast_type, fast_mat, fast_fsu, head_type, csk_angle} = props.metadata;
     const {sht_mat, sht_ref, sht_fbru2A} = props.metadata;
-    let {isExpanded}=props;
+    const {display}=props;
+    let visible = display? 'block' : 'none';
 
     return (
-        <Accordion 
-            TransitionProps={{ unmountOnExit: true }}>
-            <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="info-acc-header">
+        <Box sx={{display: visible}} >
                 <Typography>Dataset Information</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
                 <Grid container spacing={2} justifyContent="center">
                     <Grid item>
                 <table >
@@ -53,13 +46,12 @@ export default function InfoPanel(props) {
                 </tbody></table>
                 </Grid>
                 </Grid>
-            </AccordionDetails>
-        </Accordion>
+        </Box>
     )
 }
 
 InfoPanel.defaultProps = {
-    isExpanded:false,
+    display:false,
     metadata:{
         id:"",
         fast_ref: "",

@@ -197,7 +197,7 @@ export default function App() {
           sx={{ textAlign: "center" }} />
         <Paper elevation={3} sx={{ padding: "10px", textAlign: "center" }}>
           <Typography variant="overline">Outputs</Typography><br />
-          <InfoPanel expanded={readyToCalc} metadata={outputState.rawData.metadata} />
+          <InfoPanel display={readyToCalc} metadata={outputState.rawData.metadata} />
           <br />
           <span>{readyToCalc ?
             "Click legend entries to toggle data display" :

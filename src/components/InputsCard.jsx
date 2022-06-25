@@ -13,15 +13,20 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Select from '@mui/material/Select';
 import Button from "@mui/material/Button";
 
+
+/**
+ * Panel containing input fields for app
+ * @component
+ * @param {*} fbruVal - state variable for numeric input value
+ * @param {string} unitVal - state variable for unit radio value
+ * @param {string[]} fastList - array of options for fastener select dropdown
+ * @param {string} fastVal - state variable for ID of selected fastener dataset
+ * @param {string[]} fastDisp - state variable for fastener select list display text
+ * @param {function} hdlChg - App function to handle change of input field(s)
+ * @param {function} hdlSub - App function to handle form submission
+ * 
+ */
 export default function InputsCard(props){
-  // required props:
-  // state variable for numeric input value {fbruVal}
-  // state variable for unit radio value {unitVal}
-  // state variable for fastener Fsu select value {fastVal}
-  // state variable for fasteler select display text {fastDisp}
-  // handleChange function {hdlChg}
-  // handleSubmit function {hdlSub}
-  // array of options for fastener Fsu select {fastList}
 
   const fastSelEntries = props.fastList.map((val, ind)=>(<MenuItem key={ind} value={val}>{props.fastDisp[ind]}</MenuItem>));
 
@@ -36,7 +41,7 @@ export default function InputsCard(props){
       autoComplete="off"
       onSubmit={props.hdlSub}
     >
-      <div>
+      <Box>
     <FormControl sx={{ m: 1, minWidth: 200 }}>
         <InputLabel id="fastener-select-helper-label">Fastener Type</InputLabel>
         <Select
@@ -55,8 +60,8 @@ export default function InputsCard(props){
         </Select>
         <FormHelperText>Consider head style and ultimate shear strength</FormHelperText>
       </FormControl>
-    </div>
-      <div>
+    </Box>
+      <Box sx={{display: 'none'}}>
       <FormControl sx={{margin:"10px"}}>
       <TextField
           disabled
@@ -81,7 +86,7 @@ export default function InputsCard(props){
         <FormControlLabel disabled value="MPa" control={<Radio />} label="MPa" />
       </RadioGroup>
     </FormControl>
-    </div>
+    </Box>
     <Button variant="contained" type="submit">Calculate</Button>
     </Box>
     </Paper>
