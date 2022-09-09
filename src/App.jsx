@@ -16,6 +16,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Chart as ChartJS } from 'chart.js';
 import { DataEnvPlot, KcskPlot } from "./components/Graphs";
 
+// analytics
+import TagManager from 'react-gtm-module'
+const tagManagerArgs = {
+    gtmId: 'GTM-TTMV4VF'
+}
+TagManager.initialize(tagManagerArgs)
+
 // defined using let instead of const in case you want to set
 // other elements later based on primary/secondary colors
 let lightTheme = light
