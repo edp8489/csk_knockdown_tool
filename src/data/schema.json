@@ -6,6 +6,10 @@
       "CountersunkDatabase": {
         "type": "array",
         "items": { "$ref": "#/$defs/CskFastenerFamily" }
+      },
+      "ProtrudingDatabase": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/PrtFastenerFamily" }
       }
     },
     "$defs": {
@@ -20,9 +24,20 @@
         },
         "required": ["metadata", "datasets"]
       },
+      "PrtFastenerFamily": {
+        "type": "object",
+        "properties": {
+          "metadata": { "$ref": "#/$defs/PrtMetadata" },
+          "datasets": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/PrtSingleDataset" }
+          }
+        },
+        "required": ["metadata", "datasets"]
+      },
       "CskMetadata": {
         "type": "object",
-        "title": "Metadata for the fastener family test series",
+        "title": "Metadata for the countersunk fastener family test series",
         "required": [
             "id",
             "fast_ref",
@@ -149,6 +164,123 @@
             "head_type": "Reduced Shear"
         }]
       },
+      "PrtMetadata": {
+        "type": "object",
+        "title": "Metadata for the protruding fastener family test series",
+        "required": [
+            "id",
+            "fast_ref",
+            "fast_type",
+            "fast_fsu",
+            "fast_mat",
+            "sht_mat",
+            "sht_ref",
+            "sht_fbru2A",
+            "sht_fbry2A",
+            "units",
+            "head_type"
+        ],
+        "properties": {
+            "id": {
+                "type": "string",
+                "title": "Identifier string for the fastener type, material, and joint material",
+                "examples": [
+                    "HL10_95ksi_Ti-6-4_AL7075-T6"
+                ]
+            },
+            "fast_ref": {
+                "type": "string",
+                "title": "Reference to the original data source",
+                "examples": [
+                    "MIL-HDBK-5J / MMPDS-01, Table 8.1.4.2(c)",
+                    "MIL-HDBK-5J / MMPDS-01, Table 8.1.3.2.3(a)",
+                    "MIL-HDBK-5J / MMPDS-01, Table 8.1.5.2(i)"
+                ]
+            },
+            "fast_type": {
+                "type": "string",
+                "title": "Fastener type",
+                "examples": [
+                    "CSR 924",
+                    "MS21140",
+                    "HL 11"
+                ]
+            },
+            "fast_fsu": {
+                "type": "integer",
+                "title": "Fastener ultimate shear strength (psi)",
+                "examples": [
+                    95000
+                ]
+            },
+            "fast_mat": {
+                "type": "string",
+                "title": "Fastener material",
+                "examples": [
+                    "Ti 6Al-4V",
+                    "A-286",
+                    "Ti 6-4"
+                ]
+            },
+            "sht_mat": {
+                "type": "string",
+                "title": "Sheet material",
+                "examples": [
+                    "Clad 7075-T6"
+                ]
+            },
+            "sht_ref": {
+                "type": "string",
+                "title": "Reference for sheet material strength",
+                "examples": [
+                    "MIL-HDBK-5J / MMPDS-01, Table 3.7.6.0(c1)"
+                ]
+            },
+            "sht_fbru2A": {
+                "type": "integer",
+                "title": "Sheet bearing ultimate strength, e/D=2, A-basis",
+                "examples": [
+                    140000
+                ]
+            },
+            "sht_fbry2A": {
+                "type": "integer",
+                "title": "Sheet 2% offset bearing yield strength, e/D=2, A-basis",
+                "examples": [
+                    0
+                ]
+            },
+            "units": {
+                "type": "string",
+                "title": "The units system",
+                "descrpition":"(Currently unused - tool assumes everything is in + lbf)",
+                "examples": [
+                    "ips","mks","metric"
+                ]
+            },
+            "head_type": {
+                "type": "string",
+                "title": "Fastener head type",
+                "examples": [
+                    "Reduced Shear",
+                    "Tension"
+                ]
+            }
+        },
+        "examples": [{
+            "id": "HST10_95ksi_Ti-6-4_AL7075-T6",
+            "fast_ref": "MIL-HDBK-5J / MMPDS-01, Table xxxx",
+            "fast_type": "HST10",
+            "fast_fsu": 95000,
+            "fast_mat": "Ti 6Al-4V",
+            "sht_mat": "Clad 7075-T6",
+            "sht_ref": "MIL-HDBK-5J / MMPDS-01, Table 3.7.6.0(c1)",
+            "sht_fbru2A": 140000,
+            "sht_fbry2A": 0,
+            "units": "ips",
+            "head_type": "Reduced Shear"
+        }]
+      },
       "CskSingleDataset": {
         "type": "object",
         "title": "A Schema",
@@ -189,6 +321,90 @@
                     0.168,
                     0.040,
                     0.067
+                ]
+            },
+            "tsht": {
+                "type": "array",
+                "title":"Sheet thickness schema",
+                "description": "Array of sheet thickness values for dataset",
+                "items": {
+                    "type": "number",
+                    "examples": [
+                        0.05,
+                        0.063,
+                        0.071,
+                        0.080,
+                        0.090,
+                        0.100,
+                        0.125,
+                        0.160,
+                        0.190,
+                        0.250,
+                        0.200,
+                        0.312,
+                        0.040,
+                        0.050,
+                        0.375
+                    ]
+                },
+                "examples": [
+                ]
+            },
+            "Pult": {
+                "type": "array",
+                "title": "Joint ultimate strength (lbf)",
+                "description":"Array of joint ultimate strength values",
+                "items": {
+                    "type": "integer",
+                    "title": "A Schema",
+                    "examples": []
+                },
+                "examples": [
+                ]
+            },
+            "Pyld": {
+                "type": "array",
+                "title": "Joint yield strength (lbf)",
+                "description":"Array of joint yield strength values",
+                "items": {
+                    "anyOf": [{
+                        "type": "integer"
+                    },
+                    {
+                        "type": "null",
+                        "description":"Use if data is missing for a given sheet thickness"
+
+                    }]
+                },
+                "examples": [
+                ]
+            }
+        },
+        "examples": []
+      },
+      "PrtSingleDataset": {
+        "type": "object",
+        "title": "A Schema",
+        "required": [
+            "d",
+            "tsht",
+            "Pult",
+            "Pyld"
+        ],
+        "properties": {
+            "d": {
+                "type": "number",
+                "title": "Fastener diameter (in)",
+                "examples": [
+                    0.164,
+                    0.190,
+                    0.250,
+                    0.163,
+                    0.198,
+                    0.259,
+                    0.311,
+                    0.373,
+                    0.312
                 ]
             },
             "tsht": {
