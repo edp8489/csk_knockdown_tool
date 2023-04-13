@@ -40,7 +40,7 @@ export function Footer(){
       &nbsp;
       •
       &nbsp;
-      <a href="https://edp8489.github.io">Homepage</a>
+      <a href="https://www.epeters.io">Homepage</a>
       &nbsp;
       •
       &nbsp;
@@ -49,6 +49,10 @@ export function Footer(){
       •
       &nbsp;
       <a href="https://github.com/edp8489">github</a>
+      &nbsp;
+      •
+      &nbsp;
+      <a href="https://www.buymeacoffee.com/epetersio">Buy Me a Coffee</a>
   </div>
   )
 }
