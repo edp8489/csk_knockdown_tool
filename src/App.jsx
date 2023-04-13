@@ -33,11 +33,11 @@ let darkTheme = dark
 
 // import data file
 // @TODO change this to a database query
-const cskData = require("./data/csk_data.json")
+const cskData = require("./data/fastener_data.json")
 
 // generate lists for select menu
-const fSelDisp = cskData["fastener_data"].map(x => mathUtils.selectFormat(x.metadata))
-const fSelVal = cskData["fastener_data"].map(x => x.metadata.id)
+const fSelDisp = cskData["CountersunkDatabase"].map(x => mathUtils.selectFormat(x.metadata))
+const fSelVal = cskData["CountersunkDatabase"].map(x => x.metadata.id)
 
 export default function App() {
   const [darkMode, toggleDark] = React.useState(false);
@@ -81,7 +81,7 @@ export default function App() {
     }
     else {
       setReady(true)
-      const selectedData = cskData["fastener_data"].find(x => x.metadata.id === userInputs.fast_sel)
+      const selectedData = cskData["CountersunkDatabase"].find(x => x.metadata.id === userInputs.fast_sel)
       setOutputs(prevState => {
         return {
           ...prevState, ...{
@@ -161,11 +161,12 @@ export default function App() {
             <Box sx={{ typography: "h3", textAlign: "center" }}>Countersunk Joint Knockdown Calculator</Box>
             <br />
             <Box sx={{ typography: "p", textAlign: "center" }}>
-              (<em>June 2022 - in work</em>)<br />
-              This tool calculates strength knockdown factors for single-shear joints based on fastener type, fastener head style,
+                            This tool calculates strength knockdown factors for single-shear joints based on fastener type, fastener head style,
               and parent material properties. <br />
 
-              Data source: MIL-HDBK-5J / MMPDS-01.
+              Data source: MIL-HDBK-5J / MMPDS-01.<br /><br />
+              <em>Originally published June 2022. Update April 2023:</em><br />
+              Pull requests welcome! See <a href="https://github.com/edp8489/csk_knockdown_tool/tree/main/src/data" target="_blank">here</a> for schema and data file.
             </Box>
             <br />
             <Accordion TransitionProps={{ unmountOnExit: true }}>

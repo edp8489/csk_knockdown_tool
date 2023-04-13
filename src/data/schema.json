@@ -201,9 +201,8 @@
                 "type": "string",
                 "title": "Fastener type",
                 "examples": [
-                    "CSR 924",
-                    "MS21140",
-                    "HL 11"
+                    "HL10",
+                    "HL12"
                 ]
             },
             "fast_fsu": {
